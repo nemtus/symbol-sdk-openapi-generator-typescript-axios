@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/issues"
   },
-  "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme"
+  "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
 }

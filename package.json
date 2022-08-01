@@ -5,6 +5,8 @@
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "scripts": {
+    "openapi:set:version": "npx @openapitools/openapi-generator-cli version-manager set 6.0.0",
+    "openapi:generate": "npx @openapitools/openapi-generator-cli generate -i ./symbol-openapi/_build/openapi3.yml -g typescript-axios -o ./src/api",
     "build": "npm run build:cjs && npm run build:esm && node bundle",
     "build:cjs": "node pre-build-cjs && tsc --build --clean && tsc --target es5 --module commonjs && node post-build-cjs",
     "build:esm": "node pre-build-esm && tsc --build --clean && tsc --target esnext --module esnext && node post-build-esm",
@@ -28,6 +30,7 @@
   },
   "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme",
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.1",
     "@types/jest": "^28.1.6",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",

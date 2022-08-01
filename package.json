@@ -2,8 +2,12 @@
   "name": "@nemtus/symbol-sdk-openapi-generator-typescript-axios",
   "version": "0.1.0",
   "description": "Symbol SDK for TypeScript with OpenAPI Generator typescript-axios",
-  "main": "index.js",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
   "scripts": {
+    "build": "npm run build:cjs && npm run build:esm && node bundle",
+    "build:cjs": "node pre-build-cjs && tsc --build --clean && tsc --target es5 --module commonjs && node post-build-cjs",
+    "build:esm": "node pre-build-esm && tsc --build --clean && tsc --target esnext --module esnext && node post-build-esm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,6 +36,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
+    "fs-extra": "^10.1.0",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   }

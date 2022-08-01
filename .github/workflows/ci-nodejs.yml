@@ -19,11 +19,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-        working-directory: ./symbol-openapi
-      - run: npm run build
-        working-directory: ./symbol-openapi
-      - run: npm install
-      - run: npm run openapi:set:version
-      - run: npm run openapi:generate
       - run: npm run build
       - run: npm run test

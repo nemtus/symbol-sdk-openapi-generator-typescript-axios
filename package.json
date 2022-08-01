@@ -1,0 +1,26 @@
+{
+  "name": "@nemtus/symbol-sdk-openapi-generator-typescript-axios",
+  "version": "0.1.0",
+  "description": "Symbol SDK for TypeScript with OpenAPI Generator typescript-axios",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios.git"
+  },
+  "keywords": [
+    "blockchain",
+    "symbol",
+    "sdk",
+    "typescript",
+    "axios"
+  ],
+  "author": "nemtus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/issues"
+  },
+  "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme"
+}

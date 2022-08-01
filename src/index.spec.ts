@@ -1,8 +1,7 @@
-import { helloWorld } from '.';
-
-describe('helloWorld', () => {
-  it('should return Hello World Alice', () => {
+// Todo: This is dummy test. This must be replaced.
+describe('dummy', () => {
+  it('should return truthy result', () => {
     expect.hasAssertions();
-    expect(helloWorld('Alice')).toBe('Hello World Alice');
+    expect(true).toBeTruthy();
   });
 });

@@ -8,7 +8,7 @@
     "build": "npm run build:cjs && npm run build:esm && node bundle",
     "build:cjs": "node pre-build-cjs && tsc --build --clean && tsc --target es5 --module commonjs && node post-build-cjs",
     "build:esm": "node pre-build-esm && tsc --build --clean && tsc --target esnext --module esnext && node post-build-esm",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

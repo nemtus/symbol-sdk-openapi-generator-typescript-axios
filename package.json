@@ -24,6 +24,9 @@
   },
   "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme",
   "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   }
 }

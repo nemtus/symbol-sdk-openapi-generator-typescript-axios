@@ -58,16 +58,9 @@ Please be aware that you might have to rebuild openapi3.yml and generate REST AP
 
 ### Testing your changes
 
-While working on your PR you will likely want to check if your fixture is set up correctly or debug your current changes.
+While working on your PR you will likely want to check if your code is working as expected or debug your current changes.
 
-To do so you can use the Nuxt script itself to launch for example your fixture or an example app:
-
-```sh
-yarn nuxt examples/your-app
-yarn nuxt test/fixtures/your-fixture-app
-```
-
-> `npm link` could also (and does, to some extent) work for this, but it has been known to exhibit some issues. That is why we recommend calling `yarn nuxt` directly to run examples.
+To do so you can use `npm link`.
 
 ### Linting
 

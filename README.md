@@ -137,6 +137,48 @@ console.dir(accountInfoDTO, { depth: null });
 */
 ```
 
+Example with CDN
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Load from CDN or a single file bundled with webpack -->
+    <script src="https://cdn.jsdelivr.net/npm/@nemtus/symbol-sdk-openapi-generator-typescript-axios@0.1.0/index.min.js"></script>
+  </head>
+  <body>
+    <script>
+      (async () => {
+        const symbolSdk = window.symbolSdkOpenAPIGeneratorTypeScriptAxios;
+        const configurationParameters = {
+          basePath: 'http://symbol-sakura-16.next-web-technology.com:3000',
+        };
+        const configuration = new symbolSdk.Configuration(configurationParameters);
+
+        const nodeRoutesApi = new symbolSdk.NodeRoutesApi(configuration);
+        const responseNodeInfo = await nodeRoutesApi.getNodeInfo();
+        console.log(responseNodeInfo.status);
+        console.log(responseNodeInfo.statusText);
+        console.log(responseNodeInfo.data);
+
+        const accountRoutesApi = new symbolSdk.AccountRoutesApi(configuration);
+        const requestParameters = {
+          accountId: 'NCSIOEWE2364XXP65426W3RUGBRYOAGR3KMMCIA',
+        };
+        const responseAccountInfo = await accountRoutesApi.getAccountInfo(requestParameters);
+        console.log(responseAccountInfo.status);
+        console.log(responseAccountInfo.statusText);
+        console.log(responseAccountInfo.data);
+      })();
+    </script>
+  </body>
+</html>
+```
+
 ## For Developers
 
 If you don't have java installed, you need to install it.

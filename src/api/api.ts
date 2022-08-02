@@ -9926,6 +9926,97 @@ export const AccountRoutesApiFactory = function (configuration?: Configuration, 
 };
 
 /**
+ * Request parameters for getAccountInfo operation in AccountRoutesApi.
+ * @export
+ * @interface AccountRoutesApiGetAccountInfoRequest
+ */
+export interface AccountRoutesApiGetAccountInfoRequest {
+    /**
+     * Account public key or address encoded using a 32-character set.
+     * @type {string}
+     * @memberof AccountRoutesApiGetAccountInfo
+     */
+    readonly accountId: string
+}
+
+/**
+ * Request parameters for getAccountInfoMerkle operation in AccountRoutesApi.
+ * @export
+ * @interface AccountRoutesApiGetAccountInfoMerkleRequest
+ */
+export interface AccountRoutesApiGetAccountInfoMerkleRequest {
+    /**
+     * Account public key or address encoded using a 32-character set.
+     * @type {string}
+     * @memberof AccountRoutesApiGetAccountInfoMerkle
+     */
+    readonly accountId: string
+}
+
+/**
+ * Request parameters for getAccountsInfo operation in AccountRoutesApi.
+ * @export
+ * @interface AccountRoutesApiGetAccountsInfoRequest
+ */
+export interface AccountRoutesApiGetAccountsInfoRequest {
+    /**
+     * 
+     * @type {AccountIds}
+     * @memberof AccountRoutesApiGetAccountsInfo
+     */
+    readonly accountIds?: AccountIds
+}
+
+/**
+ * Request parameters for searchAccounts operation in AccountRoutesApi.
+ * @export
+ * @interface AccountRoutesApiSearchAccountsRequest
+ */
+export interface AccountRoutesApiSearchAccountsRequest {
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly order?: Order
+
+    /**
+     * Sort responses by the property set. If &#x60;&#x60;balance&#x60;&#x60; option is selected, the request must define the &#x60;&#x60;mosaicId&#x60;&#x60; filter. 
+     * @type {AccountOrderByEnum}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly orderBy?: AccountOrderByEnum
+
+    /**
+     * Filter by mosaic identifier.
+     * @type {string}
+     * @memberof AccountRoutesApiSearchAccounts
+     */
+    readonly mosaicId?: string
+}
+
+/**
  * AccountRoutesApi - object-oriented interface
  * @export
  * @class AccountRoutesApi
@@ -9935,54 +10026,49 @@ export class AccountRoutesApi extends BaseAPI {
     /**
      * Returns the account information.
      * @summary Get account information
-     * @param {string} accountId Account public key or address encoded using a 32-character set.
+     * @param {AccountRoutesApiGetAccountInfoRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountRoutesApi
      */
-    public getAccountInfo(accountId: string, options?: AxiosRequestConfig) {
-        return AccountRoutesApiFp(this.configuration).getAccountInfo(accountId, options).then((request) => request(this.axios, this.basePath));
+    public getAccountInfo(requestParameters: AccountRoutesApiGetAccountInfoRequest, options?: AxiosRequestConfig) {
+        return AccountRoutesApiFp(this.configuration).getAccountInfo(requestParameters.accountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the account merkle information.
      * @summary Get account merkle information
-     * @param {string} accountId Account public key or address encoded using a 32-character set.
+     * @param {AccountRoutesApiGetAccountInfoMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountRoutesApi
      */
-    public getAccountInfoMerkle(accountId: string, options?: AxiosRequestConfig) {
-        return AccountRoutesApiFp(this.configuration).getAccountInfoMerkle(accountId, options).then((request) => request(this.axios, this.basePath));
+    public getAccountInfoMerkle(requestParameters: AccountRoutesApiGetAccountInfoMerkleRequest, options?: AxiosRequestConfig) {
+        return AccountRoutesApiFp(this.configuration).getAccountInfoMerkle(requestParameters.accountId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the account information for an array of accounts.
      * @summary Get accounts information
-     * @param {AccountIds} [accountIds] 
+     * @param {AccountRoutesApiGetAccountsInfoRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountRoutesApi
      */
-    public getAccountsInfo(accountIds?: AccountIds, options?: AxiosRequestConfig) {
-        return AccountRoutesApiFp(this.configuration).getAccountsInfo(accountIds, options).then((request) => request(this.axios, this.basePath));
+    public getAccountsInfo(requestParameters: AccountRoutesApiGetAccountsInfoRequest = {}, options?: AxiosRequestConfig) {
+        return AccountRoutesApiFp(this.configuration).getAccountsInfo(requestParameters.accountIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of accounts.
      * @summary Search accounts
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
-     * @param {AccountOrderByEnum} [orderBy] Sort responses by the property set. If &#x60;&#x60;balance&#x60;&#x60; option is selected, the request must define the &#x60;&#x60;mosaicId&#x60;&#x60; filter. 
-     * @param {string} [mosaicId] Filter by mosaic identifier.
+     * @param {AccountRoutesApiSearchAccountsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountRoutesApi
      */
-    public searchAccounts(pageSize?: number, pageNumber?: number, offset?: string, order?: Order, orderBy?: AccountOrderByEnum, mosaicId?: string, options?: AxiosRequestConfig) {
-        return AccountRoutesApiFp(this.configuration).searchAccounts(pageSize, pageNumber, offset, order, orderBy, mosaicId, options).then((request) => request(this.axios, this.basePath));
+    public searchAccounts(requestParameters: AccountRoutesApiSearchAccountsRequest = {}, options?: AxiosRequestConfig) {
+        return AccountRoutesApiFp(this.configuration).searchAccounts(requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, requestParameters.orderBy, requestParameters.mosaicId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10292,6 +10378,118 @@ export const BlockRoutesApiFactory = function (configuration?: Configuration, ba
 };
 
 /**
+ * Request parameters for getBlockByHeight operation in BlockRoutesApi.
+ * @export
+ * @interface BlockRoutesApiGetBlockByHeightRequest
+ */
+export interface BlockRoutesApiGetBlockByHeightRequest {
+    /**
+     * Block height.
+     * @type {string}
+     * @memberof BlockRoutesApiGetBlockByHeight
+     */
+    readonly height: string
+}
+
+/**
+ * Request parameters for getMerkleReceipts operation in BlockRoutesApi.
+ * @export
+ * @interface BlockRoutesApiGetMerkleReceiptsRequest
+ */
+export interface BlockRoutesApiGetMerkleReceiptsRequest {
+    /**
+     * Block height.
+     * @type {string}
+     * @memberof BlockRoutesApiGetMerkleReceipts
+     */
+    readonly height: string
+
+    /**
+     * Receipt hash.
+     * @type {string}
+     * @memberof BlockRoutesApiGetMerkleReceipts
+     */
+    readonly hash: string
+}
+
+/**
+ * Request parameters for getMerkleTransaction operation in BlockRoutesApi.
+ * @export
+ * @interface BlockRoutesApiGetMerkleTransactionRequest
+ */
+export interface BlockRoutesApiGetMerkleTransactionRequest {
+    /**
+     * Block height.
+     * @type {string}
+     * @memberof BlockRoutesApiGetMerkleTransaction
+     */
+    readonly height: string
+
+    /**
+     * Transaction hash.
+     * @type {string}
+     * @memberof BlockRoutesApiGetMerkleTransaction
+     */
+    readonly hash: string
+}
+
+/**
+ * Request parameters for searchBlocks operation in BlockRoutesApi.
+ * @export
+ * @interface BlockRoutesApiSearchBlocksRequest
+ */
+export interface BlockRoutesApiSearchBlocksRequest {
+    /**
+     * Filter by public key of the account signing the entity.
+     * @type {string}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly signerPublicKey?: string
+
+    /**
+     * Filter by beneficiary address.
+     * @type {string}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly beneficiaryAddress?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly order?: Order
+
+    /**
+     * Sort responses by the property set. 
+     * @type {BlockOrderByEnum}
+     * @memberof BlockRoutesApiSearchBlocks
+     */
+    readonly orderBy?: BlockOrderByEnum
+}
+
+/**
  * BlockRoutesApi - object-oriented interface
  * @export
  * @class BlockRoutesApi
@@ -10301,57 +10499,49 @@ export class BlockRoutesApi extends BaseAPI {
     /**
      * Gets a block from the chain that has the given height.
      * @summary Get block information
-     * @param {string} height Block height.
+     * @param {BlockRoutesApiGetBlockByHeightRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockRoutesApi
      */
-    public getBlockByHeight(height: string, options?: AxiosRequestConfig) {
-        return BlockRoutesApiFp(this.configuration).getBlockByHeight(height, options).then((request) => request(this.axios, this.basePath));
+    public getBlockByHeight(requestParameters: BlockRoutesApiGetBlockByHeightRequest, options?: AxiosRequestConfig) {
+        return BlockRoutesApiFp(this.configuration).getBlockByHeight(requestParameters.height, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the merkle path for a receipt statement or resolution linked to a block. The merkle path is the minimum number of nodes needed to calculate the merkle root.  Steps to calculate the merkle root: 1. proofHash = hash (leaf). 2. Concatenate proofHash with the first unprocessed item from the merklePath list as follows: * a) If item.position == left -> proofHash = sha_256(item.hash + proofHash). * b) If item.position == right -> proofHash = sha_256(proofHash+ item.hash). 3. Repeat 2. for every item in the merklePath list. 4. Compare if the calculated proofHash equals the one recorded in the block header (block.receiptsHash) to verify if the statement was linked with the block. 
      * @summary Get the merkle path for a given a receipt statement hash and block
-     * @param {string} height Block height.
-     * @param {string} hash Receipt hash.
+     * @param {BlockRoutesApiGetMerkleReceiptsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockRoutesApi
      */
-    public getMerkleReceipts(height: string, hash: string, options?: AxiosRequestConfig) {
-        return BlockRoutesApiFp(this.configuration).getMerkleReceipts(height, hash, options).then((request) => request(this.axios, this.basePath));
+    public getMerkleReceipts(requestParameters: BlockRoutesApiGetMerkleReceiptsRequest, options?: AxiosRequestConfig) {
+        return BlockRoutesApiFp(this.configuration).getMerkleReceipts(requestParameters.height, requestParameters.hash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the merkle path for a transaction included in a block. The merkle path is the minimum number of nodes needed to calculate the merkle root.  Steps to calculate the merkle root: 1. proofHash = hash (leaf). 2. Concatenate proofHash with the first unprocessed item from the merklePath list as follows: * a) If item.position == left -> proofHash = sha_256(item.hash + proofHash). * b) If item.position == right -> proofHash = sha_256(proofHash+ item.hash). 3. Repeat 2. for every item in the merklePath list. 4. Compare if the calculated proofHash equals the one recorded in the block header (block.transactionsHash) to verify if the transaction was included in the block. 
      * @summary Get the merkle path for a given a transaction and block
-     * @param {string} height Block height.
-     * @param {string} hash Transaction hash.
+     * @param {BlockRoutesApiGetMerkleTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockRoutesApi
      */
-    public getMerkleTransaction(height: string, hash: string, options?: AxiosRequestConfig) {
-        return BlockRoutesApiFp(this.configuration).getMerkleTransaction(height, hash, options).then((request) => request(this.axios, this.basePath));
+    public getMerkleTransaction(requestParameters: BlockRoutesApiGetMerkleTransactionRequest, options?: AxiosRequestConfig) {
+        return BlockRoutesApiFp(this.configuration).getMerkleTransaction(requestParameters.height, requestParameters.hash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of bocks.
      * @summary Search blocks
-     * @param {string} [signerPublicKey] Filter by public key of the account signing the entity.
-     * @param {string} [beneficiaryAddress] Filter by beneficiary address.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
-     * @param {BlockOrderByEnum} [orderBy] Sort responses by the property set. 
+     * @param {BlockRoutesApiSearchBlocksRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BlockRoutesApi
      */
-    public searchBlocks(signerPublicKey?: string, beneficiaryAddress?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, orderBy?: BlockOrderByEnum, options?: AxiosRequestConfig) {
-        return BlockRoutesApiFp(this.configuration).searchBlocks(signerPublicKey, beneficiaryAddress, pageSize, pageNumber, offset, order, orderBy, options).then((request) => request(this.axios, this.basePath));
+    public searchBlocks(requestParameters: BlockRoutesApiSearchBlocksRequest = {}, options?: AxiosRequestConfig) {
+        return BlockRoutesApiFp(this.configuration).searchBlocks(requestParameters.signerPublicKey, requestParameters.beneficiaryAddress, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, requestParameters.orderBy, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10594,6 +10784,34 @@ export const FinalizationRoutesApiFactory = function (configuration?: Configurat
 };
 
 /**
+ * Request parameters for getFinalizationProofAtEpoch operation in FinalizationRoutesApi.
+ * @export
+ * @interface FinalizationRoutesApiGetFinalizationProofAtEpochRequest
+ */
+export interface FinalizationRoutesApiGetFinalizationProofAtEpochRequest {
+    /**
+     * Finalization epoch.
+     * @type {number}
+     * @memberof FinalizationRoutesApiGetFinalizationProofAtEpoch
+     */
+    readonly epoch: number
+}
+
+/**
+ * Request parameters for getFinalizationProofAtHeight operation in FinalizationRoutesApi.
+ * @export
+ * @interface FinalizationRoutesApiGetFinalizationProofAtHeightRequest
+ */
+export interface FinalizationRoutesApiGetFinalizationProofAtHeightRequest {
+    /**
+     * Block height.
+     * @type {string}
+     * @memberof FinalizationRoutesApiGetFinalizationProofAtHeight
+     */
+    readonly height: string
+}
+
+/**
  * FinalizationRoutesApi - object-oriented interface
  * @export
  * @class FinalizationRoutesApi
@@ -10603,25 +10821,25 @@ export class FinalizationRoutesApi extends BaseAPI {
     /**
      * Gets finalization proof for the greatest height associated with the given epoch.
      * @summary Get finalization proof
-     * @param {number} epoch Finalization epoch.
+     * @param {FinalizationRoutesApiGetFinalizationProofAtEpochRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FinalizationRoutesApi
      */
-    public getFinalizationProofAtEpoch(epoch: number, options?: AxiosRequestConfig) {
-        return FinalizationRoutesApiFp(this.configuration).getFinalizationProofAtEpoch(epoch, options).then((request) => request(this.axios, this.basePath));
+    public getFinalizationProofAtEpoch(requestParameters: FinalizationRoutesApiGetFinalizationProofAtEpochRequest, options?: AxiosRequestConfig) {
+        return FinalizationRoutesApiFp(this.configuration).getFinalizationProofAtEpoch(requestParameters.epoch, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets finalization proof at the given height.
      * @summary Get finalization proof
-     * @param {string} height Block height.
+     * @param {FinalizationRoutesApiGetFinalizationProofAtHeightRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FinalizationRoutesApi
      */
-    public getFinalizationProofAtHeight(height: string, options?: AxiosRequestConfig) {
-        return FinalizationRoutesApiFp(this.configuration).getFinalizationProofAtHeight(height, options).then((request) => request(this.axios, this.basePath));
+    public getFinalizationProofAtHeight(requestParameters: FinalizationRoutesApiGetFinalizationProofAtHeightRequest, options?: AxiosRequestConfig) {
+        return FinalizationRoutesApiFp(this.configuration).getFinalizationProofAtHeight(requestParameters.height, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10850,6 +11068,76 @@ export const HashLockRoutesApiFactory = function (configuration?: Configuration,
 };
 
 /**
+ * Request parameters for getHashLock operation in HashLockRoutesApi.
+ * @export
+ * @interface HashLockRoutesApiGetHashLockRequest
+ */
+export interface HashLockRoutesApiGetHashLockRequest {
+    /**
+     * Filter by hash.
+     * @type {string}
+     * @memberof HashLockRoutesApiGetHashLock
+     */
+    readonly hash: string
+}
+
+/**
+ * Request parameters for getHashLockMerkle operation in HashLockRoutesApi.
+ * @export
+ * @interface HashLockRoutesApiGetHashLockMerkleRequest
+ */
+export interface HashLockRoutesApiGetHashLockMerkleRequest {
+    /**
+     * Filter by hash.
+     * @type {string}
+     * @memberof HashLockRoutesApiGetHashLockMerkle
+     */
+    readonly hash: string
+}
+
+/**
+ * Request parameters for searchHashLock operation in HashLockRoutesApi.
+ * @export
+ * @interface HashLockRoutesApiSearchHashLockRequest
+ */
+export interface HashLockRoutesApiSearchHashLockRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof HashLockRoutesApiSearchHashLock
+     */
+    readonly address?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof HashLockRoutesApiSearchHashLock
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof HashLockRoutesApiSearchHashLock
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof HashLockRoutesApiSearchHashLock
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof HashLockRoutesApiSearchHashLock
+     */
+    readonly order?: Order
+}
+
+/**
  * HashLockRoutesApi - object-oriented interface
  * @export
  * @class HashLockRoutesApi
@@ -10859,41 +11147,37 @@ export class HashLockRoutesApi extends BaseAPI {
     /**
      * Gets the hash lock for a given hash.
      * @summary Get hash lock information
-     * @param {string} hash Filter by hash.
+     * @param {HashLockRoutesApiGetHashLockRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HashLockRoutesApi
      */
-    public getHashLock(hash: string, options?: AxiosRequestConfig) {
-        return HashLockRoutesApiFp(this.configuration).getHashLock(hash, options).then((request) => request(this.axios, this.basePath));
+    public getHashLock(requestParameters: HashLockRoutesApiGetHashLockRequest, options?: AxiosRequestConfig) {
+        return HashLockRoutesApiFp(this.configuration).getHashLock(requestParameters.hash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the hash lock merkle for a given hash.
      * @summary Get hash lock merkle information
-     * @param {string} hash Filter by hash.
+     * @param {HashLockRoutesApiGetHashLockMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HashLockRoutesApi
      */
-    public getHashLockMerkle(hash: string, options?: AxiosRequestConfig) {
-        return HashLockRoutesApiFp(this.configuration).getHashLockMerkle(hash, options).then((request) => request(this.axios, this.basePath));
+    public getHashLockMerkle(requestParameters: HashLockRoutesApiGetHashLockMerkleRequest, options?: AxiosRequestConfig) {
+        return HashLockRoutesApiFp(this.configuration).getHashLockMerkle(requestParameters.hash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of hash locks.
      * @summary Search hash lock entries
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {HashLockRoutesApiSearchHashLockRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof HashLockRoutesApi
      */
-    public searchHashLock(address?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return HashLockRoutesApiFp(this.configuration).searchHashLock(address, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchHashLock(requestParameters: HashLockRoutesApiSearchHashLockRequest = {}, options?: AxiosRequestConfig) {
+        return HashLockRoutesApiFp(this.configuration).searchHashLock(requestParameters.address, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -11150,6 +11434,104 @@ export const MetadataRoutesApiFactory = function (configuration?: Configuration,
 };
 
 /**
+ * Request parameters for getMetadata operation in MetadataRoutesApi.
+ * @export
+ * @interface MetadataRoutesApiGetMetadataRequest
+ */
+export interface MetadataRoutesApiGetMetadataRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof MetadataRoutesApiGetMetadata
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for getMetadataMerkle operation in MetadataRoutesApi.
+ * @export
+ * @interface MetadataRoutesApiGetMetadataMerkleRequest
+ */
+export interface MetadataRoutesApiGetMetadataMerkleRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof MetadataRoutesApiGetMetadataMerkle
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for searchMetadataEntries operation in MetadataRoutesApi.
+ * @export
+ * @interface MetadataRoutesApiSearchMetadataEntriesRequest
+ */
+export interface MetadataRoutesApiSearchMetadataEntriesRequest {
+    /**
+     * Filter by address sending the metadata entry.
+     * @type {string}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly sourceAddress?: string
+
+    /**
+     * Filter by target address.
+     * @type {string}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly targetAddress?: string
+
+    /**
+     * Filter by metadata key.
+     * @type {string}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly scopedMetadataKey?: string
+
+    /**
+     * Filter by namespace or mosaic id.
+     * @type {string}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly targetId?: string
+
+    /**
+     * Filter by metadata type.
+     * @type {MetadataTypeEnum}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly metadataType?: MetadataTypeEnum
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof MetadataRoutesApiSearchMetadataEntries
+     */
+    readonly order?: Order
+}
+
+/**
  * MetadataRoutesApi - object-oriented interface
  * @export
  * @class MetadataRoutesApi
@@ -11159,45 +11541,37 @@ export class MetadataRoutesApi extends BaseAPI {
     /**
      * Gets the metadata for a given composite hash.
      * @summary Get metadata information
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {MetadataRoutesApiGetMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MetadataRoutesApi
      */
-    public getMetadata(compositeHash: string, options?: AxiosRequestConfig) {
-        return MetadataRoutesApiFp(this.configuration).getMetadata(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getMetadata(requestParameters: MetadataRoutesApiGetMetadataRequest, options?: AxiosRequestConfig) {
+        return MetadataRoutesApiFp(this.configuration).getMetadata(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the metadata merkle for a given composite hash.
      * @summary Get metadata merkle information
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {MetadataRoutesApiGetMetadataMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MetadataRoutesApi
      */
-    public getMetadataMerkle(compositeHash: string, options?: AxiosRequestConfig) {
-        return MetadataRoutesApiFp(this.configuration).getMetadataMerkle(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getMetadataMerkle(requestParameters: MetadataRoutesApiGetMetadataMerkleRequest, options?: AxiosRequestConfig) {
+        return MetadataRoutesApiFp(this.configuration).getMetadataMerkle(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of metadata.
      * @summary Search metadata entries
-     * @param {string} [sourceAddress] Filter by address sending the metadata entry.
-     * @param {string} [targetAddress] Filter by target address.
-     * @param {string} [scopedMetadataKey] Filter by metadata key.
-     * @param {string} [targetId] Filter by namespace or mosaic id.
-     * @param {MetadataTypeEnum} [metadataType] Filter by metadata type.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {MetadataRoutesApiSearchMetadataEntriesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MetadataRoutesApi
      */
-    public searchMetadataEntries(sourceAddress?: string, targetAddress?: string, scopedMetadataKey?: string, targetId?: string, metadataType?: MetadataTypeEnum, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return MetadataRoutesApiFp(this.configuration).searchMetadataEntries(sourceAddress, targetAddress, scopedMetadataKey, targetId, metadataType, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchMetadataEntries(requestParameters: MetadataRoutesApiSearchMetadataEntriesRequest = {}, options?: AxiosRequestConfig) {
+        return MetadataRoutesApiFp(this.configuration).searchMetadataEntries(requestParameters.sourceAddress, requestParameters.targetAddress, requestParameters.scopedMetadataKey, requestParameters.targetId, requestParameters.metadataType, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -11483,6 +11857,90 @@ export const MosaicRoutesApiFactory = function (configuration?: Configuration, b
 };
 
 /**
+ * Request parameters for getMosaic operation in MosaicRoutesApi.
+ * @export
+ * @interface MosaicRoutesApiGetMosaicRequest
+ */
+export interface MosaicRoutesApiGetMosaicRequest {
+    /**
+     * Mosaic identifier.
+     * @type {string}
+     * @memberof MosaicRoutesApiGetMosaic
+     */
+    readonly mosaicId: string
+}
+
+/**
+ * Request parameters for getMosaicMerkle operation in MosaicRoutesApi.
+ * @export
+ * @interface MosaicRoutesApiGetMosaicMerkleRequest
+ */
+export interface MosaicRoutesApiGetMosaicMerkleRequest {
+    /**
+     * Mosaic identifier.
+     * @type {string}
+     * @memberof MosaicRoutesApiGetMosaicMerkle
+     */
+    readonly mosaicId: string
+}
+
+/**
+ * Request parameters for getMosaics operation in MosaicRoutesApi.
+ * @export
+ * @interface MosaicRoutesApiGetMosaicsRequest
+ */
+export interface MosaicRoutesApiGetMosaicsRequest {
+    /**
+     * 
+     * @type {MosaicIds}
+     * @memberof MosaicRoutesApiGetMosaics
+     */
+    readonly mosaicIds: MosaicIds
+}
+
+/**
+ * Request parameters for searchMosaics operation in MosaicRoutesApi.
+ * @export
+ * @interface MosaicRoutesApiSearchMosaicsRequest
+ */
+export interface MosaicRoutesApiSearchMosaicsRequest {
+    /**
+     * Filter by owner address.
+     * @type {string}
+     * @memberof MosaicRoutesApiSearchMosaics
+     */
+    readonly ownerAddress?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof MosaicRoutesApiSearchMosaics
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof MosaicRoutesApiSearchMosaics
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof MosaicRoutesApiSearchMosaics
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof MosaicRoutesApiSearchMosaics
+     */
+    readonly order?: Order
+}
+
+/**
  * MosaicRoutesApi - object-oriented interface
  * @export
  * @class MosaicRoutesApi
@@ -11492,53 +11950,49 @@ export class MosaicRoutesApi extends BaseAPI {
     /**
      * Gets the mosaic definition for a given mosaic identifier.
      * @summary Get mosaic information
-     * @param {string} mosaicId Mosaic identifier.
+     * @param {MosaicRoutesApiGetMosaicRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MosaicRoutesApi
      */
-    public getMosaic(mosaicId: string, options?: AxiosRequestConfig) {
-        return MosaicRoutesApiFp(this.configuration).getMosaic(mosaicId, options).then((request) => request(this.axios, this.basePath));
+    public getMosaic(requestParameters: MosaicRoutesApiGetMosaicRequest, options?: AxiosRequestConfig) {
+        return MosaicRoutesApiFp(this.configuration).getMosaic(requestParameters.mosaicId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the mosaic definition merkle for a given mosaic identifier.
      * @summary Get mosaic merkle information
-     * @param {string} mosaicId Mosaic identifier.
+     * @param {MosaicRoutesApiGetMosaicMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MosaicRoutesApi
      */
-    public getMosaicMerkle(mosaicId: string, options?: AxiosRequestConfig) {
-        return MosaicRoutesApiFp(this.configuration).getMosaicMerkle(mosaicId, options).then((request) => request(this.axios, this.basePath));
+    public getMosaicMerkle(requestParameters: MosaicRoutesApiGetMosaicMerkleRequest, options?: AxiosRequestConfig) {
+        return MosaicRoutesApiFp(this.configuration).getMosaicMerkle(requestParameters.mosaicId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of mosaic definition.
      * @summary Get mosaics information for an array of mosaics
-     * @param {MosaicIds} mosaicIds 
+     * @param {MosaicRoutesApiGetMosaicsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MosaicRoutesApi
      */
-    public getMosaics(mosaicIds: MosaicIds, options?: AxiosRequestConfig) {
-        return MosaicRoutesApiFp(this.configuration).getMosaics(mosaicIds, options).then((request) => request(this.axios, this.basePath));
+    public getMosaics(requestParameters: MosaicRoutesApiGetMosaicsRequest, options?: AxiosRequestConfig) {
+        return MosaicRoutesApiFp(this.configuration).getMosaics(requestParameters.mosaicIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of mosaics.
      * @summary Search mosaics
-     * @param {string} [ownerAddress] Filter by owner address.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {MosaicRoutesApiSearchMosaicsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MosaicRoutesApi
      */
-    public searchMosaics(ownerAddress?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return MosaicRoutesApiFp(this.configuration).searchMosaics(ownerAddress, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchMosaics(requestParameters: MosaicRoutesApiSearchMosaicsRequest = {}, options?: AxiosRequestConfig) {
+        return MosaicRoutesApiFp(this.configuration).searchMosaics(requestParameters.ownerAddress, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -11738,6 +12192,48 @@ export const MultisigRoutesApiFactory = function (configuration?: Configuration,
 };
 
 /**
+ * Request parameters for getAccountMultisig operation in MultisigRoutesApi.
+ * @export
+ * @interface MultisigRoutesApiGetAccountMultisigRequest
+ */
+export interface MultisigRoutesApiGetAccountMultisigRequest {
+    /**
+     * Account address.
+     * @type {string}
+     * @memberof MultisigRoutesApiGetAccountMultisig
+     */
+    readonly address: string
+}
+
+/**
+ * Request parameters for getAccountMultisigGraph operation in MultisigRoutesApi.
+ * @export
+ * @interface MultisigRoutesApiGetAccountMultisigGraphRequest
+ */
+export interface MultisigRoutesApiGetAccountMultisigGraphRequest {
+    /**
+     * Account address.
+     * @type {string}
+     * @memberof MultisigRoutesApiGetAccountMultisigGraph
+     */
+    readonly address: string
+}
+
+/**
+ * Request parameters for getAccountMultisigMerkle operation in MultisigRoutesApi.
+ * @export
+ * @interface MultisigRoutesApiGetAccountMultisigMerkleRequest
+ */
+export interface MultisigRoutesApiGetAccountMultisigMerkleRequest {
+    /**
+     * Account address.
+     * @type {string}
+     * @memberof MultisigRoutesApiGetAccountMultisigMerkle
+     */
+    readonly address: string
+}
+
+/**
  * MultisigRoutesApi - object-oriented interface
  * @export
  * @class MultisigRoutesApi
@@ -11747,37 +12243,37 @@ export class MultisigRoutesApi extends BaseAPI {
     /**
      * Returns the multisig account information.
      * @summary Get multisig account information
-     * @param {string} address Account address.
+     * @param {MultisigRoutesApiGetAccountMultisigRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MultisigRoutesApi
      */
-    public getAccountMultisig(address: string, options?: AxiosRequestConfig) {
-        return MultisigRoutesApiFp(this.configuration).getAccountMultisig(address, options).then((request) => request(this.axios, this.basePath));
+    public getAccountMultisig(requestParameters: MultisigRoutesApiGetAccountMultisigRequest, options?: AxiosRequestConfig) {
+        return MultisigRoutesApiFp(this.configuration).getAccountMultisig(requestParameters.address, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the multisig account graph.
      * @summary Get multisig account graph information
-     * @param {string} address Account address.
+     * @param {MultisigRoutesApiGetAccountMultisigGraphRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MultisigRoutesApi
      */
-    public getAccountMultisigGraph(address: string, options?: AxiosRequestConfig) {
-        return MultisigRoutesApiFp(this.configuration).getAccountMultisigGraph(address, options).then((request) => request(this.axios, this.basePath));
+    public getAccountMultisigGraph(requestParameters: MultisigRoutesApiGetAccountMultisigGraphRequest, options?: AxiosRequestConfig) {
+        return MultisigRoutesApiFp(this.configuration).getAccountMultisigGraph(requestParameters.address, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the multisig account merkle information.
      * @summary Get multisig account merkle information
-     * @param {string} address Account address.
+     * @param {MultisigRoutesApiGetAccountMultisigMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MultisigRoutesApi
      */
-    public getAccountMultisigMerkle(address: string, options?: AxiosRequestConfig) {
-        return MultisigRoutesApiFp(this.configuration).getAccountMultisigMerkle(address, options).then((request) => request(this.axios, this.basePath));
+    public getAccountMultisigMerkle(requestParameters: MultisigRoutesApiGetAccountMultisigMerkleRequest, options?: AxiosRequestConfig) {
+        return MultisigRoutesApiFp(this.configuration).getAccountMultisigMerkle(requestParameters.address, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -12198,6 +12694,139 @@ export const NamespaceRoutesApiFactory = function (configuration?: Configuration
 };
 
 /**
+ * Request parameters for getAccountsNames operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiGetAccountsNamesRequest
+ */
+export interface NamespaceRoutesApiGetAccountsNamesRequest {
+    /**
+     * 
+     * @type {Addresses}
+     * @memberof NamespaceRoutesApiGetAccountsNames
+     */
+    readonly addresses: Addresses
+}
+
+/**
+ * Request parameters for getMosaicsNames operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiGetMosaicsNamesRequest
+ */
+export interface NamespaceRoutesApiGetMosaicsNamesRequest {
+    /**
+     * 
+     * @type {MosaicIds}
+     * @memberof NamespaceRoutesApiGetMosaicsNames
+     */
+    readonly mosaicIds: MosaicIds
+}
+
+/**
+ * Request parameters for getNamespace operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiGetNamespaceRequest
+ */
+export interface NamespaceRoutesApiGetNamespaceRequest {
+    /**
+     * Namespace identifier.
+     * @type {string}
+     * @memberof NamespaceRoutesApiGetNamespace
+     */
+    readonly namespaceId: string
+}
+
+/**
+ * Request parameters for getNamespaceMerkle operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiGetNamespaceMerkleRequest
+ */
+export interface NamespaceRoutesApiGetNamespaceMerkleRequest {
+    /**
+     * Namespace identifier.
+     * @type {string}
+     * @memberof NamespaceRoutesApiGetNamespaceMerkle
+     */
+    readonly namespaceId: string
+}
+
+/**
+ * Request parameters for getNamespacesNames operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiGetNamespacesNamesRequest
+ */
+export interface NamespaceRoutesApiGetNamespacesNamesRequest {
+    /**
+     * 
+     * @type {NamespaceIds}
+     * @memberof NamespaceRoutesApiGetNamespacesNames
+     */
+    readonly namespaceIds: NamespaceIds
+}
+
+/**
+ * Request parameters for searchNamespaces operation in NamespaceRoutesApi.
+ * @export
+ * @interface NamespaceRoutesApiSearchNamespacesRequest
+ */
+export interface NamespaceRoutesApiSearchNamespacesRequest {
+    /**
+     * Filter by owner address.
+     * @type {string}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly ownerAddress?: string
+
+    /**
+     * Filter by registration type.
+     * @type {NamespaceRegistrationTypeEnum}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly registrationType?: NamespaceRegistrationTypeEnum
+
+    /**
+     * Filter by root namespace.
+     * @type {string}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly level0?: string
+
+    /**
+     * Filter by alias type.
+     * @type {AliasTypeEnum}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly aliasType?: AliasTypeEnum
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof NamespaceRoutesApiSearchNamespaces
+     */
+    readonly order?: Order
+}
+
+/**
  * NamespaceRoutesApi - object-oriented interface
  * @export
  * @class NamespaceRoutesApi
@@ -12207,80 +12836,73 @@ export class NamespaceRoutesApi extends BaseAPI {
     /**
      * Returns friendly names for accounts.
      * @summary Get readable names for a set of accountIds
-     * @param {Addresses} addresses 
+     * @param {NamespaceRoutesApiGetAccountsNamesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public getAccountsNames(addresses: Addresses, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).getAccountsNames(addresses, options).then((request) => request(this.axios, this.basePath));
+    public getAccountsNames(requestParameters: NamespaceRoutesApiGetAccountsNamesRequest, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).getAccountsNames(requestParameters.addresses, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns friendly names for mosaics.
      * @summary Get readable names for a set of mosaics
-     * @param {MosaicIds} mosaicIds 
+     * @param {NamespaceRoutesApiGetMosaicsNamesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public getMosaicsNames(mosaicIds: MosaicIds, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).getMosaicsNames(mosaicIds, options).then((request) => request(this.axios, this.basePath));
+    public getMosaicsNames(requestParameters: NamespaceRoutesApiGetMosaicsNamesRequest, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).getMosaicsNames(requestParameters.mosaicIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the namespace for a given namespace identifier.
      * @summary Get namespace information
-     * @param {string} namespaceId Namespace identifier.
+     * @param {NamespaceRoutesApiGetNamespaceRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public getNamespace(namespaceId: string, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).getNamespace(namespaceId, options).then((request) => request(this.axios, this.basePath));
+    public getNamespace(requestParameters: NamespaceRoutesApiGetNamespaceRequest, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).getNamespace(requestParameters.namespaceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the namespace merkle for a given namespace identifier.
      * @summary Get namespace merkle information
-     * @param {string} namespaceId Namespace identifier.
+     * @param {NamespaceRoutesApiGetNamespaceMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public getNamespaceMerkle(namespaceId: string, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).getNamespaceMerkle(namespaceId, options).then((request) => request(this.axios, this.basePath));
+    public getNamespaceMerkle(requestParameters: NamespaceRoutesApiGetNamespaceMerkleRequest, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).getNamespaceMerkle(requestParameters.namespaceId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns friendly names for namespaces.
      * @summary Get readable names for a set of namespaces
-     * @param {NamespaceIds} namespaceIds 
+     * @param {NamespaceRoutesApiGetNamespacesNamesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public getNamespacesNames(namespaceIds: NamespaceIds, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).getNamespacesNames(namespaceIds, options).then((request) => request(this.axios, this.basePath));
+    public getNamespacesNames(requestParameters: NamespaceRoutesApiGetNamespacesNamesRequest, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).getNamespacesNames(requestParameters.namespaceIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of namespaces.
      * @summary Search namespaces
-     * @param {string} [ownerAddress] Filter by owner address.
-     * @param {NamespaceRegistrationTypeEnum} [registrationType] Filter by registration type.
-     * @param {string} [level0] Filter by root namespace.
-     * @param {AliasTypeEnum} [aliasType] Filter by alias type.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {NamespaceRoutesApiSearchNamespacesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NamespaceRoutesApi
      */
-    public searchNamespaces(ownerAddress?: string, registrationType?: NamespaceRegistrationTypeEnum, level0?: string, aliasType?: AliasTypeEnum, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return NamespaceRoutesApiFp(this.configuration).searchNamespaces(ownerAddress, registrationType, level0, aliasType, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchNamespaces(requestParameters: NamespaceRoutesApiSearchNamespacesRequest = {}, options?: AxiosRequestConfig) {
+        return NamespaceRoutesApiFp(this.configuration).searchNamespaces(requestParameters.ownerAddress, requestParameters.registrationType, requestParameters.level0, requestParameters.aliasType, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13352,6 +13974,181 @@ export const ReceiptRoutesApiFactory = function (configuration?: Configuration, 
 };
 
 /**
+ * Request parameters for searchAddressResolutionStatements operation in ReceiptRoutesApi.
+ * @export
+ * @interface ReceiptRoutesApiSearchAddressResolutionStatementsRequest
+ */
+export interface ReceiptRoutesApiSearchAddressResolutionStatementsRequest {
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchAddressResolutionStatements
+     */
+    readonly height?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchAddressResolutionStatements
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchAddressResolutionStatements
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchAddressResolutionStatements
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof ReceiptRoutesApiSearchAddressResolutionStatements
+     */
+    readonly order?: Order
+}
+
+/**
+ * Request parameters for searchMosaicResolutionStatements operation in ReceiptRoutesApi.
+ * @export
+ * @interface ReceiptRoutesApiSearchMosaicResolutionStatementsRequest
+ */
+export interface ReceiptRoutesApiSearchMosaicResolutionStatementsRequest {
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchMosaicResolutionStatements
+     */
+    readonly height?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchMosaicResolutionStatements
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchMosaicResolutionStatements
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchMosaicResolutionStatements
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof ReceiptRoutesApiSearchMosaicResolutionStatements
+     */
+    readonly order?: Order
+}
+
+/**
+ * Request parameters for searchReceipts operation in ReceiptRoutesApi.
+ * @export
+ * @interface ReceiptRoutesApiSearchReceiptsRequest
+ */
+export interface ReceiptRoutesApiSearchReceiptsRequest {
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly height?: string
+
+    /**
+     * Only blocks with height greater or equal than this one are returned.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly fromHeight?: string
+
+    /**
+     * Only blocks with height smaller or equal than this one are returned.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly toHeight?: string
+
+    /**
+     * Filter by receipt type. To filter by multiple receipt types, add more filter query params like: &#x60;&#x60;receiptType&#x3D;8515&amp;receiptType&#x3D;20803&#x60;&#x60;. 
+     * @type {Array<ReceiptTypeEnum>}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly receiptType?: Array<ReceiptTypeEnum>
+
+    /**
+     * Filter by address of the account receiving the transaction.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly recipientAddress?: string
+
+    /**
+     * Filter by address sending mosaics.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly senderAddress?: string
+
+    /**
+     * Filter by target address.
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly targetAddress?: string
+
+    /**
+     * Mosaic or namespace identifier
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly artifactId?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof ReceiptRoutesApiSearchReceipts
+     */
+    readonly order?: Order
+}
+
+/**
  * ReceiptRoutesApi - object-oriented interface
  * @export
  * @class ReceiptRoutesApi
@@ -13361,56 +14158,37 @@ export class ReceiptRoutesApi extends BaseAPI {
     /**
      * Gets an array of address resolution statements.
      * @summary Get receipts address resolution statements
-     * @param {string} [height] Filter by block height.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {ReceiptRoutesApiSearchAddressResolutionStatementsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReceiptRoutesApi
      */
-    public searchAddressResolutionStatements(height?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return ReceiptRoutesApiFp(this.configuration).searchAddressResolutionStatements(height, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchAddressResolutionStatements(requestParameters: ReceiptRoutesApiSearchAddressResolutionStatementsRequest = {}, options?: AxiosRequestConfig) {
+        return ReceiptRoutesApiFp(this.configuration).searchAddressResolutionStatements(requestParameters.height, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of mosaic resolution statements.
      * @summary Get receipts mosaic resolution statements
-     * @param {string} [height] Filter by block height.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {ReceiptRoutesApiSearchMosaicResolutionStatementsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReceiptRoutesApi
      */
-    public searchMosaicResolutionStatements(height?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return ReceiptRoutesApiFp(this.configuration).searchMosaicResolutionStatements(height, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchMosaicResolutionStatements(requestParameters: ReceiptRoutesApiSearchMosaicResolutionStatementsRequest = {}, options?: AxiosRequestConfig) {
+        return ReceiptRoutesApiFp(this.configuration).searchMosaicResolutionStatements(requestParameters.height, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets an array of transaction statements.
      * @summary Search transaction statements
-     * @param {string} [height] Filter by block height.
-     * @param {string} [fromHeight] Only blocks with height greater or equal than this one are returned.
-     * @param {string} [toHeight] Only blocks with height smaller or equal than this one are returned.
-     * @param {Array<ReceiptTypeEnum>} [receiptType] Filter by receipt type. To filter by multiple receipt types, add more filter query params like: &#x60;&#x60;receiptType&#x3D;8515&amp;receiptType&#x3D;20803&#x60;&#x60;. 
-     * @param {string} [recipientAddress] Filter by address of the account receiving the transaction.
-     * @param {string} [senderAddress] Filter by address sending mosaics.
-     * @param {string} [targetAddress] Filter by target address.
-     * @param {string} [artifactId] Mosaic or namespace identifier
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {ReceiptRoutesApiSearchReceiptsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ReceiptRoutesApi
      */
-    public searchReceipts(height?: string, fromHeight?: string, toHeight?: string, receiptType?: Array<ReceiptTypeEnum>, recipientAddress?: string, senderAddress?: string, targetAddress?: string, artifactId?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return ReceiptRoutesApiFp(this.configuration).searchReceipts(height, fromHeight, toHeight, receiptType, recipientAddress, senderAddress, targetAddress, artifactId, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchReceipts(requestParameters: ReceiptRoutesApiSearchReceiptsRequest = {}, options?: AxiosRequestConfig) {
+        return ReceiptRoutesApiFp(this.configuration).searchReceipts(requestParameters.height, requestParameters.fromHeight, requestParameters.toHeight, requestParameters.receiptType, requestParameters.recipientAddress, requestParameters.senderAddress, requestParameters.targetAddress, requestParameters.artifactId, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13639,6 +14417,76 @@ export const RestrictionAccountRoutesApiFactory = function (configuration?: Conf
 };
 
 /**
+ * Request parameters for getAccountRestrictions operation in RestrictionAccountRoutesApi.
+ * @export
+ * @interface RestrictionAccountRoutesApiGetAccountRestrictionsRequest
+ */
+export interface RestrictionAccountRoutesApiGetAccountRestrictionsRequest {
+    /**
+     * Account address.
+     * @type {string}
+     * @memberof RestrictionAccountRoutesApiGetAccountRestrictions
+     */
+    readonly address: string
+}
+
+/**
+ * Request parameters for getAccountRestrictionsMerkle operation in RestrictionAccountRoutesApi.
+ * @export
+ * @interface RestrictionAccountRoutesApiGetAccountRestrictionsMerkleRequest
+ */
+export interface RestrictionAccountRoutesApiGetAccountRestrictionsMerkleRequest {
+    /**
+     * Account address.
+     * @type {string}
+     * @memberof RestrictionAccountRoutesApiGetAccountRestrictionsMerkle
+     */
+    readonly address: string
+}
+
+/**
+ * Request parameters for searchAccountRestrictions operation in RestrictionAccountRoutesApi.
+ * @export
+ * @interface RestrictionAccountRoutesApiSearchAccountRestrictionsRequest
+ */
+export interface RestrictionAccountRoutesApiSearchAccountRestrictionsRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof RestrictionAccountRoutesApiSearchAccountRestrictions
+     */
+    readonly address?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof RestrictionAccountRoutesApiSearchAccountRestrictions
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof RestrictionAccountRoutesApiSearchAccountRestrictions
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof RestrictionAccountRoutesApiSearchAccountRestrictions
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof RestrictionAccountRoutesApiSearchAccountRestrictions
+     */
+    readonly order?: Order
+}
+
+/**
  * RestrictionAccountRoutesApi - object-oriented interface
  * @export
  * @class RestrictionAccountRoutesApi
@@ -13648,41 +14496,37 @@ export class RestrictionAccountRoutesApi extends BaseAPI {
     /**
      * Returns the account restrictions for a given address.
      * @summary Get the account restrictions
-     * @param {string} address Account address.
+     * @param {RestrictionAccountRoutesApiGetAccountRestrictionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionAccountRoutesApi
      */
-    public getAccountRestrictions(address: string, options?: AxiosRequestConfig) {
-        return RestrictionAccountRoutesApiFp(this.configuration).getAccountRestrictions(address, options).then((request) => request(this.axios, this.basePath));
+    public getAccountRestrictions(requestParameters: RestrictionAccountRoutesApiGetAccountRestrictionsRequest, options?: AxiosRequestConfig) {
+        return RestrictionAccountRoutesApiFp(this.configuration).getAccountRestrictions(requestParameters.address, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the account restrictions merkle for a given address.
      * @summary Get the account restrictions merkle
-     * @param {string} address Account address.
+     * @param {RestrictionAccountRoutesApiGetAccountRestrictionsMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionAccountRoutesApi
      */
-    public getAccountRestrictionsMerkle(address: string, options?: AxiosRequestConfig) {
-        return RestrictionAccountRoutesApiFp(this.configuration).getAccountRestrictionsMerkle(address, options).then((request) => request(this.axios, this.basePath));
+    public getAccountRestrictionsMerkle(requestParameters: RestrictionAccountRoutesApiGetAccountRestrictionsMerkleRequest, options?: AxiosRequestConfig) {
+        return RestrictionAccountRoutesApiFp(this.configuration).getAccountRestrictionsMerkle(requestParameters.address, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of account restrictions.
      * @summary Search account restrictions
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {RestrictionAccountRoutesApiSearchAccountRestrictionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionAccountRoutesApi
      */
-    public searchAccountRestrictions(address?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return RestrictionAccountRoutesApiFp(this.configuration).searchAccountRestrictions(address, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchAccountRestrictions(requestParameters: RestrictionAccountRoutesApiSearchAccountRestrictionsRequest = {}, options?: AxiosRequestConfig) {
+        return RestrictionAccountRoutesApiFp(this.configuration).searchAccountRestrictions(requestParameters.address, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13925,6 +14769,90 @@ export const RestrictionMosaicRoutesApiFactory = function (configuration?: Confi
 };
 
 /**
+ * Request parameters for getMosaicRestrictions operation in RestrictionMosaicRoutesApi.
+ * @export
+ * @interface RestrictionMosaicRoutesApiGetMosaicRestrictionsRequest
+ */
+export interface RestrictionMosaicRoutesApiGetMosaicRestrictionsRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof RestrictionMosaicRoutesApiGetMosaicRestrictions
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for getMosaicRestrictionsMerkle operation in RestrictionMosaicRoutesApi.
+ * @export
+ * @interface RestrictionMosaicRoutesApiGetMosaicRestrictionsMerkleRequest
+ */
+export interface RestrictionMosaicRoutesApiGetMosaicRestrictionsMerkleRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof RestrictionMosaicRoutesApiGetMosaicRestrictionsMerkle
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for searchMosaicRestrictions operation in RestrictionMosaicRoutesApi.
+ * @export
+ * @interface RestrictionMosaicRoutesApiSearchMosaicRestrictionsRequest
+ */
+export interface RestrictionMosaicRoutesApiSearchMosaicRestrictionsRequest {
+    /**
+     * Filter by mosaic identifier.
+     * @type {string}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly mosaicId?: string
+
+    /**
+     * Filter by entry type.
+     * @type {MosaicRestrictionEntryTypeEnum}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly entryType?: MosaicRestrictionEntryTypeEnum
+
+    /**
+     * Filter by target address.
+     * @type {string}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly targetAddress?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof RestrictionMosaicRoutesApiSearchMosaicRestrictions
+     */
+    readonly order?: Order
+}
+
+/**
  * RestrictionMosaicRoutesApi - object-oriented interface
  * @export
  * @class RestrictionMosaicRoutesApi
@@ -13934,43 +14862,37 @@ export class RestrictionMosaicRoutesApi extends BaseAPI {
     /**
      * Returns the mosaic restrictions for a composite hash.
      * @summary Get the mosaic restrictions
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {RestrictionMosaicRoutesApiGetMosaicRestrictionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionMosaicRoutesApi
      */
-    public getMosaicRestrictions(compositeHash: string, options?: AxiosRequestConfig) {
-        return RestrictionMosaicRoutesApiFp(this.configuration).getMosaicRestrictions(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getMosaicRestrictions(requestParameters: RestrictionMosaicRoutesApiGetMosaicRestrictionsRequest, options?: AxiosRequestConfig) {
+        return RestrictionMosaicRoutesApiFp(this.configuration).getMosaicRestrictions(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns the mosaic restrictions merkle for a given composite hash.
      * @summary Get the mosaic restrictions merkle
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {RestrictionMosaicRoutesApiGetMosaicRestrictionsMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionMosaicRoutesApi
      */
-    public getMosaicRestrictionsMerkle(compositeHash: string, options?: AxiosRequestConfig) {
-        return RestrictionMosaicRoutesApiFp(this.configuration).getMosaicRestrictionsMerkle(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getMosaicRestrictionsMerkle(requestParameters: RestrictionMosaicRoutesApiGetMosaicRestrictionsMerkleRequest, options?: AxiosRequestConfig) {
+        return RestrictionMosaicRoutesApiFp(this.configuration).getMosaicRestrictionsMerkle(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of mosaic restrictions.
      * @summary Search mosaic restrictions
-     * @param {string} [mosaicId] Filter by mosaic identifier.
-     * @param {MosaicRestrictionEntryTypeEnum} [entryType] Filter by entry type.
-     * @param {string} [targetAddress] Filter by target address.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {RestrictionMosaicRoutesApiSearchMosaicRestrictionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RestrictionMosaicRoutesApi
      */
-    public searchMosaicRestrictions(mosaicId?: string, entryType?: MosaicRestrictionEntryTypeEnum, targetAddress?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return RestrictionMosaicRoutesApiFp(this.configuration).searchMosaicRestrictions(mosaicId, entryType, targetAddress, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchMosaicRestrictions(requestParameters: RestrictionMosaicRoutesApiSearchMosaicRestrictionsRequest = {}, options?: AxiosRequestConfig) {
+        return RestrictionMosaicRoutesApiFp(this.configuration).searchMosaicRestrictions(requestParameters.mosaicId, requestParameters.entryType, requestParameters.targetAddress, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -14206,6 +15128,83 @@ export const SecretLockRoutesApiFactory = function (configuration?: Configuratio
 };
 
 /**
+ * Request parameters for getSecretLock operation in SecretLockRoutesApi.
+ * @export
+ * @interface SecretLockRoutesApiGetSecretLockRequest
+ */
+export interface SecretLockRoutesApiGetSecretLockRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof SecretLockRoutesApiGetSecretLock
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for getSecretLockMerkle operation in SecretLockRoutesApi.
+ * @export
+ * @interface SecretLockRoutesApiGetSecretLockMerkleRequest
+ */
+export interface SecretLockRoutesApiGetSecretLockMerkleRequest {
+    /**
+     * Filter by composite hash.
+     * @type {string}
+     * @memberof SecretLockRoutesApiGetSecretLockMerkle
+     */
+    readonly compositeHash: string
+}
+
+/**
+ * Request parameters for searchSecretLock operation in SecretLockRoutesApi.
+ * @export
+ * @interface SecretLockRoutesApiSearchSecretLockRequest
+ */
+export interface SecretLockRoutesApiSearchSecretLockRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly address?: string
+
+    /**
+     * Filter by secret.
+     * @type {string}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly secret?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof SecretLockRoutesApiSearchSecretLock
+     */
+    readonly order?: Order
+}
+
+/**
  * SecretLockRoutesApi - object-oriented interface
  * @export
  * @class SecretLockRoutesApi
@@ -14215,42 +15214,37 @@ export class SecretLockRoutesApi extends BaseAPI {
     /**
      * Gets the hash lock for a given composite hash.
      * @summary Get secret lock information
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {SecretLockRoutesApiGetSecretLockRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecretLockRoutesApi
      */
-    public getSecretLock(compositeHash: string, options?: AxiosRequestConfig) {
-        return SecretLockRoutesApiFp(this.configuration).getSecretLock(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getSecretLock(requestParameters: SecretLockRoutesApiGetSecretLockRequest, options?: AxiosRequestConfig) {
+        return SecretLockRoutesApiFp(this.configuration).getSecretLock(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Gets the hash lock merkle for a given composite hash.
      * @summary Get secret lock merkle information
-     * @param {string} compositeHash Filter by composite hash.
+     * @param {SecretLockRoutesApiGetSecretLockMerkleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecretLockRoutesApi
      */
-    public getSecretLockMerkle(compositeHash: string, options?: AxiosRequestConfig) {
-        return SecretLockRoutesApiFp(this.configuration).getSecretLockMerkle(compositeHash, options).then((request) => request(this.axios, this.basePath));
+    public getSecretLockMerkle(requestParameters: SecretLockRoutesApiGetSecretLockMerkleRequest, options?: AxiosRequestConfig) {
+        return SecretLockRoutesApiFp(this.configuration).getSecretLockMerkle(requestParameters.compositeHash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of secret locks.
      * @summary Search secret lock entries
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {string} [secret] Filter by secret.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {SecretLockRoutesApiSearchSecretLockRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SecretLockRoutesApi
      */
-    public searchSecretLock(address?: string, secret?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return SecretLockRoutesApiFp(this.configuration).searchSecretLock(address, secret, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchSecretLock(requestParameters: SecretLockRoutesApiSearchSecretLockRequest = {}, options?: AxiosRequestConfig) {
+        return SecretLockRoutesApiFp(this.configuration).searchSecretLock(requestParameters.address, requestParameters.secret, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -15254,6 +16248,468 @@ export const TransactionRoutesApiFactory = function (configuration?: Configurati
 };
 
 /**
+ * Request parameters for announceCosignatureTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiAnnounceCosignatureTransactionRequest
+ */
+export interface TransactionRoutesApiAnnounceCosignatureTransactionRequest {
+    /**
+     * 
+     * @type {Cosignature}
+     * @memberof TransactionRoutesApiAnnounceCosignatureTransaction
+     */
+    readonly cosignature: Cosignature
+}
+
+/**
+ * Request parameters for announcePartialTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiAnnouncePartialTransactionRequest
+ */
+export interface TransactionRoutesApiAnnouncePartialTransactionRequest {
+    /**
+     * 
+     * @type {TransactionPayload}
+     * @memberof TransactionRoutesApiAnnouncePartialTransaction
+     */
+    readonly transactionPayload: TransactionPayload
+}
+
+/**
+ * Request parameters for announceTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiAnnounceTransactionRequest
+ */
+export interface TransactionRoutesApiAnnounceTransactionRequest {
+    /**
+     * 
+     * @type {TransactionPayload}
+     * @memberof TransactionRoutesApiAnnounceTransaction
+     */
+    readonly transactionPayload: TransactionPayload
+}
+
+/**
+ * Request parameters for getConfirmedTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetConfirmedTransactionRequest
+ */
+export interface TransactionRoutesApiGetConfirmedTransactionRequest {
+    /**
+     * Transaction id or hash.
+     * @type {string}
+     * @memberof TransactionRoutesApiGetConfirmedTransaction
+     */
+    readonly transactionId: string
+}
+
+/**
+ * Request parameters for getConfirmedTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetConfirmedTransactionsRequest
+ */
+export interface TransactionRoutesApiGetConfirmedTransactionsRequest {
+    /**
+     * 
+     * @type {TransactionIds}
+     * @memberof TransactionRoutesApiGetConfirmedTransactions
+     */
+    readonly transactionIds: TransactionIds
+}
+
+/**
+ * Request parameters for getPartialTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetPartialTransactionRequest
+ */
+export interface TransactionRoutesApiGetPartialTransactionRequest {
+    /**
+     * Transaction id or hash.
+     * @type {string}
+     * @memberof TransactionRoutesApiGetPartialTransaction
+     */
+    readonly transactionId: string
+}
+
+/**
+ * Request parameters for getPartialTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetPartialTransactionsRequest
+ */
+export interface TransactionRoutesApiGetPartialTransactionsRequest {
+    /**
+     * 
+     * @type {TransactionIds}
+     * @memberof TransactionRoutesApiGetPartialTransactions
+     */
+    readonly transactionIds: TransactionIds
+}
+
+/**
+ * Request parameters for getUnconfirmedTransaction operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetUnconfirmedTransactionRequest
+ */
+export interface TransactionRoutesApiGetUnconfirmedTransactionRequest {
+    /**
+     * Transaction id or hash.
+     * @type {string}
+     * @memberof TransactionRoutesApiGetUnconfirmedTransaction
+     */
+    readonly transactionId: string
+}
+
+/**
+ * Request parameters for getUnconfirmedTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiGetUnconfirmedTransactionsRequest
+ */
+export interface TransactionRoutesApiGetUnconfirmedTransactionsRequest {
+    /**
+     * 
+     * @type {TransactionIds}
+     * @memberof TransactionRoutesApiGetUnconfirmedTransactions
+     */
+    readonly transactionIds: TransactionIds
+}
+
+/**
+ * Request parameters for searchConfirmedTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiSearchConfirmedTransactionsRequest
+ */
+export interface TransactionRoutesApiSearchConfirmedTransactionsRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly address?: string
+
+    /**
+     * Filter by address of the account receiving the transaction.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly recipientAddress?: string
+
+    /**
+     * Filter by public key of the account signing the entity.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly signerPublicKey?: string
+
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly height?: string
+
+    /**
+     * Only blocks with height greater or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly fromHeight?: string
+
+    /**
+     * Only blocks with height smaller or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly toHeight?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly fromTransferAmount?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly toTransferAmount?: string
+
+    /**
+     * Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
+     * @type {Array<TransactionTypeEnum>}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly type?: Array<TransactionTypeEnum>
+
+    /**
+     * When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
+     * @type {boolean}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly embedded?: boolean
+
+    /**
+     * Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly transferMosaicId?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof TransactionRoutesApiSearchConfirmedTransactions
+     */
+    readonly order?: Order
+}
+
+/**
+ * Request parameters for searchPartialTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiSearchPartialTransactionsRequest
+ */
+export interface TransactionRoutesApiSearchPartialTransactionsRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly address?: string
+
+    /**
+     * Filter by address of the account receiving the transaction.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly recipientAddress?: string
+
+    /**
+     * Filter by public key of the account signing the entity.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly signerPublicKey?: string
+
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly height?: string
+
+    /**
+     * Only blocks with height greater or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly fromHeight?: string
+
+    /**
+     * Only blocks with height smaller or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly toHeight?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly fromTransferAmount?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly toTransferAmount?: string
+
+    /**
+     * Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
+     * @type {Array<TransactionTypeEnum>}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly type?: Array<TransactionTypeEnum>
+
+    /**
+     * When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
+     * @type {boolean}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly embedded?: boolean
+
+    /**
+     * Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly transferMosaicId?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof TransactionRoutesApiSearchPartialTransactions
+     */
+    readonly order?: Order
+}
+
+/**
+ * Request parameters for searchUnconfirmedTransactions operation in TransactionRoutesApi.
+ * @export
+ * @interface TransactionRoutesApiSearchUnconfirmedTransactionsRequest
+ */
+export interface TransactionRoutesApiSearchUnconfirmedTransactionsRequest {
+    /**
+     * Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly address?: string
+
+    /**
+     * Filter by address of the account receiving the transaction.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly recipientAddress?: string
+
+    /**
+     * Filter by public key of the account signing the entity.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly signerPublicKey?: string
+
+    /**
+     * Filter by block height.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly height?: string
+
+    /**
+     * Only blocks with height greater or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly fromHeight?: string
+
+    /**
+     * Only blocks with height smaller or equal than this one are returned.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly toHeight?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly fromTransferAmount?: string
+
+    /**
+     * Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly toTransferAmount?: string
+
+    /**
+     * Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
+     * @type {Array<TransactionTypeEnum>}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly type?: Array<TransactionTypeEnum>
+
+    /**
+     * When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
+     * @type {boolean}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly embedded?: boolean
+
+    /**
+     * Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly transferMosaicId?: string
+
+    /**
+     * Select the number of entries to return.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly pageSize?: number
+
+    /**
+     * Filter by page number.
+     * @type {number}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly pageNumber?: number
+
+    /**
+     * Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
+     * @type {string}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly offset?: string
+
+    /**
+     * Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @type {Order}
+     * @memberof TransactionRoutesApiSearchUnconfirmedTransactions
+     */
+    readonly order?: Order
+}
+
+/**
  * TransactionRoutesApi - object-oriented interface
  * @export
  * @class TransactionRoutesApi
@@ -15263,187 +16719,145 @@ export class TransactionRoutesApi extends BaseAPI {
     /**
      * Announces a cosignature transaction to the network.
      * @summary Announce a cosignature transaction
-     * @param {Cosignature} cosignature 
+     * @param {TransactionRoutesApiAnnounceCosignatureTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public announceCosignatureTransaction(cosignature: Cosignature, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).announceCosignatureTransaction(cosignature, options).then((request) => request(this.axios, this.basePath));
+    public announceCosignatureTransaction(requestParameters: TransactionRoutesApiAnnounceCosignatureTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).announceCosignatureTransaction(requestParameters.cosignature, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Announces an aggregate bonded transaction to the network.
      * @summary Announce an aggregate bonded transaction
-     * @param {TransactionPayload} transactionPayload 
+     * @param {TransactionRoutesApiAnnouncePartialTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public announcePartialTransaction(transactionPayload: TransactionPayload, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).announcePartialTransaction(transactionPayload, options).then((request) => request(this.axios, this.basePath));
+    public announcePartialTransaction(requestParameters: TransactionRoutesApiAnnouncePartialTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).announcePartialTransaction(requestParameters.transactionPayload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Announces a transaction to the network. The [catbuffer library](https://github.com/nemtech/catbuffer) defines the protocol to serialize and deserialize Symbol entities. Catbuffers are integrated into [Symbol SDKs](https://nemtech.github.io/sdk.html).  It\'s recommended to use SDKs instead of calling the API endpoint directly to announce transactions. 
      * @summary Announce a new transaction
-     * @param {TransactionPayload} transactionPayload 
+     * @param {TransactionRoutesApiAnnounceTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public announceTransaction(transactionPayload: TransactionPayload, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).announceTransaction(transactionPayload, options).then((request) => request(this.axios, this.basePath));
+    public announceTransaction(requestParameters: TransactionRoutesApiAnnounceTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).announceTransaction(requestParameters.transactionPayload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns confirmed transaction information given a transactionId or hash.
      * @summary Get confirmed transaction information
-     * @param {string} transactionId Transaction id or hash.
+     * @param {TransactionRoutesApiGetConfirmedTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getConfirmedTransaction(transactionId: string, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getConfirmedTransaction(transactionId, options).then((request) => request(this.axios, this.basePath));
+    public getConfirmedTransaction(requestParameters: TransactionRoutesApiGetConfirmedTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getConfirmedTransaction(requestParameters.transactionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns confirmed transactions information for a given array of transactionIds.
      * @summary Get confirmed trasactions information
-     * @param {TransactionIds} transactionIds 
+     * @param {TransactionRoutesApiGetConfirmedTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getConfirmedTransactions(transactionIds: TransactionIds, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getConfirmedTransactions(transactionIds, options).then((request) => request(this.axios, this.basePath));
+    public getConfirmedTransactions(requestParameters: TransactionRoutesApiGetConfirmedTransactionsRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getConfirmedTransactions(requestParameters.transactionIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns partial transaction information given a transactionId or hash.
      * @summary Get partial transaction information
-     * @param {string} transactionId Transaction id or hash.
+     * @param {TransactionRoutesApiGetPartialTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getPartialTransaction(transactionId: string, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getPartialTransaction(transactionId, options).then((request) => request(this.axios, this.basePath));
+    public getPartialTransaction(requestParameters: TransactionRoutesApiGetPartialTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getPartialTransaction(requestParameters.transactionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns partial transactions information for a given array of transactionIds.
      * @summary Get partial trasactions information
-     * @param {TransactionIds} transactionIds 
+     * @param {TransactionRoutesApiGetPartialTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getPartialTransactions(transactionIds: TransactionIds, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getPartialTransactions(transactionIds, options).then((request) => request(this.axios, this.basePath));
+    public getPartialTransactions(requestParameters: TransactionRoutesApiGetPartialTransactionsRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getPartialTransactions(requestParameters.transactionIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns unconfirmed transaction information given a transactionId or hash.
      * @summary Get unconfirmed transaction information
-     * @param {string} transactionId Transaction id or hash.
+     * @param {TransactionRoutesApiGetUnconfirmedTransactionRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getUnconfirmedTransaction(transactionId: string, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getUnconfirmedTransaction(transactionId, options).then((request) => request(this.axios, this.basePath));
+    public getUnconfirmedTransaction(requestParameters: TransactionRoutesApiGetUnconfirmedTransactionRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getUnconfirmedTransaction(requestParameters.transactionId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns unconfirmed transactions information for a given array of transactionIds.
      * @summary Get unconfirmed trasactions information
-     * @param {TransactionIds} transactionIds 
+     * @param {TransactionRoutesApiGetUnconfirmedTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public getUnconfirmedTransactions(transactionIds: TransactionIds, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).getUnconfirmedTransactions(transactionIds, options).then((request) => request(this.axios, this.basePath));
+    public getUnconfirmedTransactions(requestParameters: TransactionRoutesApiGetUnconfirmedTransactionsRequest, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).getUnconfirmedTransactions(requestParameters.transactionIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of confirmed transactions. If a transaction was announced with an alias rather than an address, the address that will be considered when querying is the one that was resolved from the alias at confirmation time. 
      * @summary Search confirmed transactions
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {string} [recipientAddress] Filter by address of the account receiving the transaction.
-     * @param {string} [signerPublicKey] Filter by public key of the account signing the entity.
-     * @param {string} [height] Filter by block height.
-     * @param {string} [fromHeight] Only blocks with height greater or equal than this one are returned.
-     * @param {string} [toHeight] Only blocks with height smaller or equal than this one are returned.
-     * @param {string} [fromTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
-     * @param {string} [toTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
-     * @param {Array<TransactionTypeEnum>} [type] Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
-     * @param {boolean} [embedded] When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
-     * @param {string} [transferMosaicId] Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {TransactionRoutesApiSearchConfirmedTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public searchConfirmedTransactions(address?: string, recipientAddress?: string, signerPublicKey?: string, height?: string, fromHeight?: string, toHeight?: string, fromTransferAmount?: string, toTransferAmount?: string, type?: Array<TransactionTypeEnum>, embedded?: boolean, transferMosaicId?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).searchConfirmedTransactions(address, recipientAddress, signerPublicKey, height, fromHeight, toHeight, fromTransferAmount, toTransferAmount, type, embedded, transferMosaicId, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchConfirmedTransactions(requestParameters: TransactionRoutesApiSearchConfirmedTransactionsRequest = {}, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).searchConfirmedTransactions(requestParameters.address, requestParameters.recipientAddress, requestParameters.signerPublicKey, requestParameters.height, requestParameters.fromHeight, requestParameters.toHeight, requestParameters.fromTransferAmount, requestParameters.toTransferAmount, requestParameters.type, requestParameters.embedded, requestParameters.transferMosaicId, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of partial transactions.
      * @summary Search partial transactions
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {string} [recipientAddress] Filter by address of the account receiving the transaction.
-     * @param {string} [signerPublicKey] Filter by public key of the account signing the entity.
-     * @param {string} [height] Filter by block height.
-     * @param {string} [fromHeight] Only blocks with height greater or equal than this one are returned.
-     * @param {string} [toHeight] Only blocks with height smaller or equal than this one are returned.
-     * @param {string} [fromTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
-     * @param {string} [toTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
-     * @param {Array<TransactionTypeEnum>} [type] Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
-     * @param {boolean} [embedded] When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
-     * @param {string} [transferMosaicId] Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {TransactionRoutesApiSearchPartialTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public searchPartialTransactions(address?: string, recipientAddress?: string, signerPublicKey?: string, height?: string, fromHeight?: string, toHeight?: string, fromTransferAmount?: string, toTransferAmount?: string, type?: Array<TransactionTypeEnum>, embedded?: boolean, transferMosaicId?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).searchPartialTransactions(address, recipientAddress, signerPublicKey, height, fromHeight, toHeight, fromTransferAmount, toTransferAmount, type, embedded, transferMosaicId, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchPartialTransactions(requestParameters: TransactionRoutesApiSearchPartialTransactionsRequest = {}, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).searchPartialTransactions(requestParameters.address, requestParameters.recipientAddress, requestParameters.signerPublicKey, requestParameters.height, requestParameters.fromHeight, requestParameters.toHeight, requestParameters.fromTransferAmount, requestParameters.toTransferAmount, requestParameters.type, requestParameters.embedded, requestParameters.transferMosaicId, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of unconfirmed transactions.
      * @summary Search unconfirmed transactions
-     * @param {string} [address] Filter by address involved in the transaction. An account\&#39;s address is considered to be involved in the transaction when the account is the sender, recipient, or it is required to cosign the transaction. This filter cannot be combined with &#x60;&#x60;recipientAddress&#x60;&#x60; and &#x60;&#x60;signerPublicKey&#x60;&#x60; query params. 
-     * @param {string} [recipientAddress] Filter by address of the account receiving the transaction.
-     * @param {string} [signerPublicKey] Filter by public key of the account signing the entity.
-     * @param {string} [height] Filter by block height.
-     * @param {string} [fromHeight] Only blocks with height greater or equal than this one are returned.
-     * @param {string} [toHeight] Only blocks with height smaller or equal than this one are returned.
-     * @param {string} [fromTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, greater or equal than this amount are returned. 
-     * @param {string} [toTransferAmount] Requires providing the &#x60;transferMosaicId&#x60; filter. Only transfer transactions with a transfer amount of the provided mosaic id, lesser or equal than this amount are returned. 
-     * @param {Array<TransactionTypeEnum>} [type] Filter by transaction type. To filter by multiple transaction types, add more filter query params like: &#x60;&#x60;type&#x3D;16974&amp;type&#x3D;16718&#x60;&#x60;. 
-     * @param {boolean} [embedded] When true, the endpoint also returns all the embedded aggregate transactions. Otherwise, only top-level transactions used to calculate the block transactionsHash are returned. **Note:** This field does not work when combined with the &#x60;&#x60;address&#x60;&#x60; parameter. This is, embedded transactions containing the address specified through the &#x60;&#x60;address&#x60;&#x60; parameter will not be returned even when used with &#x60;&#x60;embedded&#x3D;true&#x60;&#x60;. There is no problem when using other parameters like &#x60;&#x60;recipientAddress&#x60;&#x60; instead. 
-     * @param {string} [transferMosaicId] Filters transactions involving a specific &#x60;&#x60;mosaicId&#x60;&#x60;.
-     * @param {number} [pageSize] Select the number of entries to return.
-     * @param {number} [pageNumber] Filter by page number.
-     * @param {string} [offset] Entry id at which to start pagination. If the ordering parameter is set to -id, the elements returned precede the identifier. Otherwise, newer elements with respect to the id are returned. 
-     * @param {Order} [order] Sort responses in ascending or descending order based on the collection property set on the param &#x60;&#x60;orderBy&#x60;&#x60;. If the request does not specify &#x60;&#x60;orderBy&#x60;&#x60;, REST returns the collection ordered by id. 
+     * @param {TransactionRoutesApiSearchUnconfirmedTransactionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionRoutesApi
      */
-    public searchUnconfirmedTransactions(address?: string, recipientAddress?: string, signerPublicKey?: string, height?: string, fromHeight?: string, toHeight?: string, fromTransferAmount?: string, toTransferAmount?: string, type?: Array<TransactionTypeEnum>, embedded?: boolean, transferMosaicId?: string, pageSize?: number, pageNumber?: number, offset?: string, order?: Order, options?: AxiosRequestConfig) {
-        return TransactionRoutesApiFp(this.configuration).searchUnconfirmedTransactions(address, recipientAddress, signerPublicKey, height, fromHeight, toHeight, fromTransferAmount, toTransferAmount, type, embedded, transferMosaicId, pageSize, pageNumber, offset, order, options).then((request) => request(this.axios, this.basePath));
+    public searchUnconfirmedTransactions(requestParameters: TransactionRoutesApiSearchUnconfirmedTransactionsRequest = {}, options?: AxiosRequestConfig) {
+        return TransactionRoutesApiFp(this.configuration).searchUnconfirmedTransactions(requestParameters.address, requestParameters.recipientAddress, requestParameters.signerPublicKey, requestParameters.height, requestParameters.fromHeight, requestParameters.toHeight, requestParameters.fromTransferAmount, requestParameters.toTransferAmount, requestParameters.type, requestParameters.embedded, requestParameters.transferMosaicId, requestParameters.pageSize, requestParameters.pageNumber, requestParameters.offset, requestParameters.order, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -15590,6 +17004,34 @@ export const TransactionStatusRoutesApiFactory = function (configuration?: Confi
 };
 
 /**
+ * Request parameters for getTransactionStatus operation in TransactionStatusRoutesApi.
+ * @export
+ * @interface TransactionStatusRoutesApiGetTransactionStatusRequest
+ */
+export interface TransactionStatusRoutesApiGetTransactionStatusRequest {
+    /**
+     * Transaction hash.
+     * @type {string}
+     * @memberof TransactionStatusRoutesApiGetTransactionStatus
+     */
+    readonly hash: string
+}
+
+/**
+ * Request parameters for getTransactionStatuses operation in TransactionStatusRoutesApi.
+ * @export
+ * @interface TransactionStatusRoutesApiGetTransactionStatusesRequest
+ */
+export interface TransactionStatusRoutesApiGetTransactionStatusesRequest {
+    /**
+     * 
+     * @type {TransactionHashes}
+     * @memberof TransactionStatusRoutesApiGetTransactionStatuses
+     */
+    readonly transactionHashes: TransactionHashes
+}
+
+/**
  * TransactionStatusRoutesApi - object-oriented interface
  * @export
  * @class TransactionStatusRoutesApi
@@ -15599,25 +17041,25 @@ export class TransactionStatusRoutesApi extends BaseAPI {
     /**
      * Returns the transaction status for a given hash.
      * @summary Get transaction status
-     * @param {string} hash Transaction hash.
+     * @param {TransactionStatusRoutesApiGetTransactionStatusRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionStatusRoutesApi
      */
-    public getTransactionStatus(hash: string, options?: AxiosRequestConfig) {
-        return TransactionStatusRoutesApiFp(this.configuration).getTransactionStatus(hash, options).then((request) => request(this.axios, this.basePath));
+    public getTransactionStatus(requestParameters: TransactionStatusRoutesApiGetTransactionStatusRequest, options?: AxiosRequestConfig) {
+        return TransactionStatusRoutesApiFp(this.configuration).getTransactionStatus(requestParameters.hash, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Returns an array of transaction statuses for a given array of transaction hashes.
      * @summary Get transaction statuses
-     * @param {TransactionHashes} transactionHashes 
+     * @param {TransactionStatusRoutesApiGetTransactionStatusesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionStatusRoutesApi
      */
-    public getTransactionStatuses(transactionHashes: TransactionHashes, options?: AxiosRequestConfig) {
-        return TransactionStatusRoutesApiFp(this.configuration).getTransactionStatuses(transactionHashes, options).then((request) => request(this.axios, this.basePath));
+    public getTransactionStatuses(requestParameters: TransactionStatusRoutesApiGetTransactionStatusesRequest, options?: AxiosRequestConfig) {
+        return TransactionStatusRoutesApiFp(this.configuration).getTransactionStatuses(requestParameters.transactionHashes, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

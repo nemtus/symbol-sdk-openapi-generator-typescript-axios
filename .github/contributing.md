@@ -39,8 +39,7 @@ To write great tests, let us explain our test structure:
 
 #### Unit tests
 
-The unit tests can be found in `*.spec.ts` and will be executed after building. A fresh Nuxt server will be used
-per test so that no shared state (except the initial state from the build step) is present.
+The unit tests can be found in `*.spec.ts` and will be executed after building in GitHub Actions CI process.
 
 After adding your unit tests, you can run them directly:
 

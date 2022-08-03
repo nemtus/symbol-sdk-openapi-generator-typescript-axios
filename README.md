@@ -58,7 +58,7 @@ import {
   AccountRoutesApiGetAccountInfoRequest,
   Configuration,
   ConfigurationParameters,
-} from '';
+} from '@nemtus/symbol-sdk-openapi-generator-typescript-axios';
 
 const configurationParameters: ConfigurationParameters = {
   basePath: 'https://symbol-sakura-16.next-web-technology.com:3001',

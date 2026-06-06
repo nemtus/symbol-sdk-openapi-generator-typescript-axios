@@ -1,0 +1,18 @@
+{
+  "name": "nodejs-javascript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "yasunori-matsuoka <yasunori.matsuoka@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@nemtus/symbol-sdk-openapi-generator-typescript-axios": "../../dist"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.8"
+  }
+}

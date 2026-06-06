@@ -13,7 +13,12 @@ describe('getNodeInfo', () => {
     const nodeRoutesApi = new symbolSdk.NodeRoutesApi(configuration);
 
     // Act
-    const response = await nodeRoutesApi.getNodeInfo();
+    let response;
+    try {
+      response = await nodeRoutesApi.getNodeInfo();
+    } catch (error) {
+      throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
 
     // Assert (shared fixture; volatile fields relaxed there)
     assertNodeInfo(expect, response.data);

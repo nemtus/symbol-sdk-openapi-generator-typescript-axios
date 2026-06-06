@@ -19,10 +19,21 @@
         const requestParameters = {
           accountId: 'NCSIOEWE2364XXP65426W3RUGBRYOAGR3KMMCIA',
         };
-        const responseAccountInfo = await accountRoutesApi.getAccountInfo(requestParameters);
-        // typescript-axios returns an AxiosResponse; log the DTO so the Playwright
-        // test captures the same shape the shared fixture asserts on.
-        console.log(responseAccountInfo.data);
+        try {
+          const responseAccountInfo = await accountRoutesApi.getAccountInfo(requestParameters);
+          // typescript-axios returns an AxiosResponse; log the DTO so the Playwright
+          // test captures the same shape the shared fixture asserts on.
+          console.log(responseAccountInfo.data);
+        } catch (error) {
+          const errorLike = error || {};
+          console.error({
+            scope: 'getAccountInfo',
+            message: errorLike.message || String(error),
+            code: errorLike.code,
+            status: errorLike.response && errorLike.response.status,
+            data: errorLike.response && errorLike.response.data,
+          });
+        }
         // Example:
         /*
         {

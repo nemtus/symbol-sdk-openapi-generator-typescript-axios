@@ -16,10 +16,21 @@
         };
         const configuration = new symbolSdk.Configuration(configurationParameters);
         const nodeRoutesApi = new symbolSdk.NodeRoutesApi(configuration);
-        const responseNodeInfo = await nodeRoutesApi.getNodeInfo();
-        // typescript-axios returns an AxiosResponse; log the DTO so the Playwright
-        // test captures the same shape the shared fixture asserts on.
-        console.log(responseNodeInfo.data);
+        try {
+          const responseNodeInfo = await nodeRoutesApi.getNodeInfo();
+          // typescript-axios returns an AxiosResponse; log the DTO so the Playwright
+          // test captures the same shape the shared fixture asserts on.
+          console.log(responseNodeInfo.data);
+        } catch (error) {
+          const errorLike = error || {};
+          console.error({
+            scope: 'getNodeInfo',
+            message: errorLike.message || String(error),
+            code: errorLike.code,
+            status: errorLike.response && errorLike.response.status,
+            data: errorLike.response && errorLike.response.data,
+          });
+        }
         // Example:
         /*
         {

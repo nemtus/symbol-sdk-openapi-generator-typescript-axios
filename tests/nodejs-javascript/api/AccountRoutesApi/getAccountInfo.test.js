@@ -16,7 +16,12 @@ describe('getAccountInfo', () => {
     };
 
     // Act
-    const response = await accountRoutesApi.getAccountInfo(requestParameters);
+    let response;
+    try {
+      response = await accountRoutesApi.getAccountInfo(requestParameters);
+    } catch (error) {
+      throw new Error(`getAccountInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
 
     // Assert (shared fixture; volatile fields relaxed there)
     assertAccountInfo(expect, response.data);

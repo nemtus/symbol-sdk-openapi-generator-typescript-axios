@@ -36,8 +36,9 @@ function dangerousRm(c) {
       .split(/\s+/)
       .filter((t) => t && !t.startsWith('-'))
       .map((t) => t.replace(/['"]/g, ''));
-    const danger = new Set(['/', '~', '~/', '*', '.', './', '..', '/*', '$HOME', '${HOME}']);
-    return targets.some((t) => danger.has(t) || /^\/\*?$/.test(t));
+    const danger = new Set(['/', '~', '~/', '~/*', '*', '.', './', '..', '/*', '$HOME', '$HOME/*', '${HOME}', '${HOME}/*']);
+    const homeGlob = /^(~|\$HOME|\$\{HOME\})\/\*$/;
+    return targets.some((t) => danger.has(t) || /^\/\*?$/.test(t) || homeGlob.test(t));
   });
 }
 

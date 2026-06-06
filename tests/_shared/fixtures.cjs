@@ -50,9 +50,11 @@ function assertNodeInfo(expect, response) {
 // activity buckets and importance change whenever the account transacts, so those
 // are asserted by shape only.
 function assertAccountInfo(expect, response) {
+  expect(response && typeof response).toBe('object');
   expect(typeof response.id).toBe('string');
 
   const account = response.account;
+  expect(account && typeof account).toBe('object');
   expect(account.version).toBe(expectedStableAccount.version);
   expect(account.address).toBe(expectedStableAccount.address);
   expect(account.addressHeight).toBe(expectedStableAccount.addressHeight);

@@ -11,8 +11,13 @@ test('getNodeInfo return valid response', async () => {
   const nodeRoutesApi: NodeRoutesApi = new NodeRoutesApi(configuration);
 
   // Act
-  const response = await nodeRoutesApi.getNodeInfo();
-  const nodeInfoDTO: NodeInfoDTO = response.data;
+  let nodeInfoDTO: NodeInfoDTO;
+  try {
+    const response = await nodeRoutesApi.getNodeInfo();
+    nodeInfoDTO = response.data;
+  } catch (error) {
+    throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
 
   // Assert (shared fixture; volatile fields relaxed there)
   fixtures.assertNodeInfo(expect, nodeInfoDTO);

@@ -3,7 +3,7 @@
 // with Prettier and ESLint --fix. Best-effort and non-blocking: it always exits 0
 // so a formatting hiccup never interrupts the session.
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
@@ -29,10 +29,18 @@ try {
 }
 if (!filePath) process.exit(0);
 
-const abs = path.isAbsolute(filePath) ? filePath : path.join(projectDir, filePath);
-const rel = path.relative(projectDir, abs);
-if (rel.startsWith('..')) process.exit(0); // outside the project
-if (!CODE_EXT.has(path.extname(abs))) process.exit(0);
+const abs = path.resolve(projectDir, filePath);
+let realAbs = '';
+let rel = '';
+try {
+  const realProjectDir = realpathSync(projectDir);
+  realAbs = realpathSync(abs);
+  rel = path.relative(realProjectDir, realAbs);
+} catch {
+  process.exit(0);
+}
+if (rel.startsWith('..') || path.isAbsolute(rel)) process.exit(0); // outside the project
+if (!CODE_EXT.has(path.extname(realAbs))) process.exit(0);
 if (IGNORED.some((d) => rel === d || rel.startsWith(d + path.sep))) process.exit(0);
 
 const run = (cmd, args) => {
@@ -43,7 +51,7 @@ const run = (cmd, args) => {
   }
 };
 
-run('npx', ['--no-install', 'prettier', '--write', abs]);
-run('npx', ['--no-install', 'eslint', '--fix', abs]);
+run('npx', ['--no-install', 'prettier', '--write', realAbs]);
+run('npx', ['--no-install', 'eslint', '--fix', realAbs]);
 
 process.exit(0);

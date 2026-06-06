@@ -1,0 +1,10 @@
+node_modules
+dist
+lib
+cdn
+coverage
+openapi-spec
+src/api
+tests/*/node_modules
+**/*.min.js
+package-lock.json

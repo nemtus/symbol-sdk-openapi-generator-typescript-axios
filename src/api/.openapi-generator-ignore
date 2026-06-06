@@ -21,3 +21,14 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# Keep the hand-written guidance files (and their Codex/Gemini symlinks) from
+# being removed on regeneration.
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+
+# Don't emit the generator's stock "push the generated client to its own git repo"
+# helper. It is unused here (publishing goes through the build + npm OIDC pipeline),
+# does `git init`/`git add .`/`git push origin master`, and would only be a footgun.
+git_push.sh

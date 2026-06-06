@@ -4,6 +4,12 @@ Symbol SDK for TypeScript with OpenAPI Generator typescript-axios
 
 Note: Currently, This is a very experimental level.
 
+| Type | Status/Link |
+| --------- | -------------------- |
+| CI status | [![CI Node.js](https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/actions/workflows/ci-nodejs.yml/badge.svg)](https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/actions/workflows/ci-nodejs.yml) |
+| Latest npm publish status | [![CD Publish to npm](https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/actions/workflows/cd-publish-to-npm.yml/badge.svg)](https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios/actions/workflows/cd-publish-to-npm.yml) |
+| npm package link | [https://www.npmjs.com/package/@nemtus/symbol-sdk-openapi-generator-typescript-axios](https://www.npmjs.com/package/@nemtus/symbol-sdk-openapi-generator-typescript-axios) |
+
 ## For package users
 
 ### Install
@@ -179,34 +185,74 @@ Example with CDN
 </html>
 ```
 
-## For Developers
+## For Package Developers
 
-If you don't have java installed, you need to install it.
+### 0. Prerequisite
 
-### 1. Build openapi3.yml
-
-If necessary update git submodule of `symbol-openapi`.
+- Clone the repository
 
 ```bash
-cd symbol-openapi
-npm install
-npm run build
+git clone https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios.git
 ```
 
-Use symbol-openapi/_build/openapi3.yml to generate REST API client code.
+- Install Java
+
+If you don't have java installed, you need to install it (required by the OpenAPI Generator).
+
+### 1. Fetch openapi3.yml
+
+This project consumes the official [symbol/symbol-openapi](https://github.com/symbol/symbol-openapi) `openapi3.yml`
+that is published as a GitHub release asset. `fetch-openapi.js` downloads a version-pinned copy and verifies its
+SHA-256 before use (previously this spec was built locally from a git submodule, which pulled in vulnerable build
+tooling).
+
+```bash
+npm ci
+npm run openapi:fetch
+```
+
+This writes the verified spec to `openapi-spec/openapi3.yml` (git-ignored). To bump the spec version, edit
+`SPEC_VERSION` / `SPEC_SHA256` in `fetch-openapi.js`.
 
 ### 2. Generate REST API Client Code
 
 ```bash
-cd ..
-npm install
 npm run openapi:set:version
 npm run openapi:generate
 npm run build
 ```
 
-Then, REST API client code will be generated in `src/api`.
+Then, REST API client code will be generated in `src/api` and bundled into `dist`.
 Do not edit `src/api` manually.
+
+### 3. Release
+
+Releasing is a single action — bump the version, create the `vX.Y.Z` tag, and push it, which triggers the
+tag-driven CD workflow (npm publish via OIDC Trusted Publishing, gated by the `release` Environment):
+
+```bash
+npm run release:minor   # or release:patch / release:major
+```
+
+### 4. Tests
+
+```bash
+# Deterministic unit tests (mocked axios adapter, no network)
+npm run test
+
+# Consumer / live-node tests (build the root first; each is a separate npm project)
+cd tests/nodejs-javascript && npm ci && npm test
+cd tests/nodejs-typescript && npm ci && npm test
+cd tests/browser-cdn && npm ci && npx playwright install chromium && npm run test
+```
+
+## Security
+
+`axios` is a runtime dependency of this package, so it (and its transitive tree) is shipped to consumers. The
+safe version floor and transitive `overrides` (`form-data`, `follow-redirects`) are pinned in the root
+`package.json`; CI gates every install with `npm audit --package-lock-only` (prod + dev, fails on any severity)
+and additionally fails the gating job if the resolved axios drops below the known-CVE-free floor. Local installs
+are hardened via `.npmrc` (`ignore-scripts=true`, `min-release-age=7`). See `CLAUDE.md` for the full policy.
 
 ## We use
 

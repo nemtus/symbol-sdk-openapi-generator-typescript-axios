@@ -3,21 +3,300 @@ name: CI Node.js
 on:
   pull_request:
   push:
+    branches:
+      - main
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+# `npm ci` installs the lockfile-pinned versions regardless of age, so the local
+# .npmrc cooldown (min-release-age) does not gate it — every install is instead gated
+# by `npm audit`. The remaining cooldown only affects the global `npm install -g`
+# tooling here, which we deliberately leave subject to it.
+env:
+  # `npm ci` wipes node_modules, so cache npm's download directory instead. Point it at a
+  # workspace-local path that is writable in every job (including the browser-cdn container).
+  NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        java-version: [21]
+        node-version: [24.x]
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: 'microsoft'
+          java-version: ${{ matrix.java-version }}
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
+          registry-url: 'https://registry.npmjs.org'
+      - run: java -version
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-root
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-root-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-root-
+      - run: npm audit --package-lock-only
+      - run: npm ci
+      # Use the lockfile-pinned generator (a devDependency), not an unpinned global
+      # `npm install -g @latest`. npx resolves to the local node_modules copy, so the
+      # version is reproducible, audited (it's in the lockfile), and bumped via Dependabot.
+      - run: npx @openapitools/openapi-generator-cli version
+      - run: npm run openapi:fetch
+      - run: npm run openapi:set:version
+      - run: npm run openapi:generate
       - run: npm run build
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+          retention-days: 1
+
+  test-unit:
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [21]
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-root-test
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-root-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-root-
+      - run: npm audit --package-lock-only
+      - run: npm ci
+      # Defence in depth: even if `npm audit` misses something (e.g. a known-bad axios
+      # version with no advisory filed yet), fail this gating job when the resolved axios
+      # is below the known-CVE-free floor. The `overrides` in package.json force the safe
+      # form-data / follow-redirects transitive versions; this proves they took effect.
+      - name: Verify resolved axios meets the security floor
+        run: |
+          node -e "const v=require('axios/package.json').version; const min='1.15.1';
+            const c=(a,b)=>a.split('.').map(Number).reduce((s,n,i)=>s||(n-b.split('.').map(Number)[i]),0);
+            if (c(v,min)<0){console.error('axios '+v+' < '+min+' (security floor)');process.exit(1)} console.log('axios '+v+' >= '+min+' OK')"
       - run: npm run test
+
+  test-nodejs-javascript:
+    needs: build
+    runs-on: ubuntu-latest
+    # Hits a live mainnet node; deterministic coverage is in test-unit, so don't
+    # let external flakiness gate CI.
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [21]
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-nodejs-javascript
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-javascript-${{ hashFiles('tests/nodejs-javascript/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-javascript-
+      - run: npm audit --package-lock-only
+        working-directory: ./tests/nodejs-javascript
+      - run: npm ci
+        working-directory: ./tests/nodejs-javascript
+      - run: npm test
+        working-directory: ./tests/nodejs-javascript
+
+  test-nodejs-typescript:
+    needs: build
+    runs-on: ubuntu-latest
+    # Hits a live mainnet node; deterministic coverage is in test-unit, so don't
+    # let external flakiness gate CI.
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [21]
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-nodejs-typescript
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-typescript-${{ hashFiles('tests/nodejs-typescript/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-typescript-
+      - run: npm audit --package-lock-only
+        working-directory: ./tests/nodejs-typescript
+      - run: npm ci
+        working-directory: ./tests/nodejs-typescript
+      - run: npm test
+        working-directory: ./tests/nodejs-typescript
+
+  test-browser-cdn:
+    needs: build
+    runs-on: ubuntu-latest
+    # Hits a live mainnet node; deterministic coverage is in test-unit, so don't
+    # let external flakiness gate CI.
+    continue-on-error: true
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
+      options: --user 1001
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version: [21]
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-browser-cdn
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-browser-cdn-${{ hashFiles('tests/browser-cdn/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-browser-cdn-
+      - run: npm audit --package-lock-only
+        working-directory: ./tests/browser-cdn
+      - run: npm ci
+        working-directory: ./tests/browser-cdn
+      - run: npm run test
+        working-directory: ./tests/browser-cdn
+
+  dry-run-publish:
+    # Only needs the build artifact — `npm pack` validates packaging, independent of
+    # test outcomes — so run it in parallel with the test jobs instead of after them.
+    # (Gating it behind the live-node suites added latency but no safety: those are
+    # continue-on-error, and packaging validity doesn't depend on any test result.)
+    needs: build
+    # Run on every event (PRs, main pushes, manual) so the publishable ./dist artifact
+    # is validated before merge, not only after. It only downloads the artifact and runs
+    # `npm pack --dry-run` (no auth/secrets), so it is cheap and fork-safe.
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [21]
+        node-version: [24.x]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
+          path: dist/
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-root-dry-run
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-root-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-root-
+      - run: npm audit --package-lock-only
+      - run: npm ci
+      # Validate the SAME tree CD publishes (./dist) by packing it. We use `npm pack`,
+      # not `npm publish --dry-run`: the latter contacts the registry and fails with
+      # "cannot publish over previously published versions" because the version isn't
+      # bumped until release, which would make every PR red. `npm pack` validates the
+      # tarball contents and package.json offline, which is the actual pre-merge signal.
+      - run: npm pack --dry-run
+        working-directory: ./dist
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24.x
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: cache-lint
+        with:
+          path: ${{ github.workspace }}/.npm
+          key: ${{ runner.os }}-node-24.x-root-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-24.x-root-
+      - run: npm audit --package-lock-only
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run type:check
+
+  pinact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      # Validation only: fail the CI when an action is not pinned to a full commit
+      # SHA or a version comment is out of sync. Never modifies files.
+      - uses: suzuki-shunsuke/pinact-action@896d595f299e71d65b9d28349d6956abe144390a # v3.0.0
+        with:
+          fix: 'false'

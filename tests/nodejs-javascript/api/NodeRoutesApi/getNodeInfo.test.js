@@ -17,7 +17,7 @@ describe('getNodeInfo', () => {
     try {
       response = await nodeRoutesApi.getNodeInfo();
     } catch (error) {
-      throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
     }
 
     // Assert (shared fixture; volatile fields relaxed there)

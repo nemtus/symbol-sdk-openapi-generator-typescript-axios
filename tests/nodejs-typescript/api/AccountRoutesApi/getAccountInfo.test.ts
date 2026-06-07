@@ -26,7 +26,7 @@ describe('getAccountInfo', () => {
       const response = await accountRoutesApi.getAccountInfo(requestParameters);
       accountInfoDTO = response.data;
     } catch (error) {
-      throw new Error(`getAccountInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(`getAccountInfo failed: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
     }
 
     // Assert (shared fixture; volatile fields relaxed there)

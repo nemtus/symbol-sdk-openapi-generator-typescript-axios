@@ -16,7 +16,7 @@ test('getNodeInfo return valid response', async () => {
     const response = await nodeRoutesApi.getNodeInfo();
     nodeInfoDTO = response.data;
   } catch (error) {
-    throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`getNodeInfo failed: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
   }
 
   // Assert (shared fixture; volatile fields relaxed there)

@@ -20,7 +20,7 @@ describe('getAccountInfo', () => {
     try {
       response = await accountRoutesApi.getAccountInfo(requestParameters);
     } catch (error) {
-      throw new Error(`getAccountInfo failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(`getAccountInfo failed: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
     }
 
     // Assert (shared fixture; volatile fields relaxed there)

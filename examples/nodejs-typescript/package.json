@@ -14,6 +14,6 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@nemtus/symbol-sdk-openapi-generator-typescript-axios": "^0.1.0"
+    "@nemtus/symbol-sdk-openapi-generator-typescript-axios": "^0.2.0"
   }
 }

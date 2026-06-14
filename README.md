@@ -199,20 +199,21 @@ git clone https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axio
 
 If you don't have java installed, you need to install it (required by the OpenAPI Generator).
 
-### 1. Fetch openapi3.yml
+### 1. Install the OpenAPI spec
 
-This project consumes the official [symbol/symbol-openapi](https://github.com/symbol/symbol-openapi) `openapi3.yml`
-that is published as a GitHub release asset. `fetch-openapi.js` downloads a version-pinned copy and verifies its
-SHA-256 before use (previously this spec was built locally from a git submodule, which pulled in vulnerable build
-tooling).
+This project consumes the OpenAPI spec from the [`@nemtus/symbol-openapi`](https://www.npmjs.com/package/@nemtus/symbol-openapi)
+npm package — built and published from the [`nemtus/symbol`](https://github.com/nemtus/symbol) fork (a mirror of
+upstream [`symbol/symbol`](https://github.com/symbol/symbol), whose `openapi/` directory is the source of truth).
+It is a version-pinned `devDependency`, so `npm ci` installs it and the `package-lock.json` integrity hash verifies
+it. (The former `symbol/symbol-openapi` release repo was archived in 2026; before that this spec was built locally
+from a git submodule, which pulled in vulnerable build tooling.)
 
 ```bash
 npm ci
-npm run openapi:fetch
 ```
 
-This writes the verified spec to `openapi-spec/openapi3.yml` (git-ignored). To bump the spec version, edit
-`SPEC_VERSION` / `SPEC_SHA256` in `fetch-openapi.js`.
+This makes the spec available at `node_modules/@nemtus/symbol-openapi/openapi3.yml`. To bump the spec version, bump
+the `@nemtus/symbol-openapi` devDependency in `package.json` (and the lockfile).
 
 ### 2. Generate REST API Client Code
 
@@ -256,7 +257,7 @@ are hardened via `.npmrc` (`ignore-scripts=true`, `min-release-age=7`). See `CLA
 
 ## We use
 
-- [symbol/symbol-openapi](https://github.com/symbol/symbol-openapi) to generate openapi3.yml
+- [@nemtus/symbol-openapi](https://www.npmjs.com/package/@nemtus/symbol-openapi) for `openapi3.yml`, built and published from the [nemtus/symbol](https://github.com/nemtus/symbol) mirror of upstream [symbol/symbol](https://github.com/symbol/symbol)
 - [OpenAPI Generator](https://openapi-generator.tech/) to generate REST API client codes
   - Especially [typescript-axios Generator](https://openapi-generator.tech/docs/generators/typescript-axios)
 - [cosmos-client/cosmos-client-ts](https://github.com/cosmos-client/cosmos-client-ts) as a reference of package structure

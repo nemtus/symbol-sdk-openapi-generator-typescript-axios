@@ -15,9 +15,14 @@ of CI. See "Security: axios floor & monitoring" below.
 ## Architecture
 
 ### Code Generation Pipeline
-1. **Published OpenAPI spec** - `fetch-openapi.js` downloads the official `openapi3.yml` from a pinned
-   `symbol/symbol-openapi` GitHub release and verifies its SHA-256, writing it to `openapi-spec/openapi3.yml`
-   (git-ignored). This replaced the former `symbol-openapi` submodule build, removing its vulnerable dev tooling.
+1. **OpenAPI spec as an npm devDependency** - The spec ships as the `@nemtus/symbol-openapi` package; the
+   generator reads its bundled `node_modules/@nemtus/symbol-openapi/openapi3.yml`. That package is built and
+   published from the `nemtus/symbol` fork (a mirror of upstream `symbol/symbol`, whose `openapi/` dir is the
+   modular source of truth). This replaced the old `fetch-openapi.js` download-and-checksum flow: the upstream
+   `symbol/symbol-openapi` release repo was **archived 2026-05-05** (frozen at v1.0.4) and no longer tracks the
+   spec. Pinning is now ordinary npm dependency pinning — the package version replaces `SPEC_VERSION` and the
+   `package-lock.json` integrity hash replaces `SPEC_SHA256` (verified by `npm ci`). It is a `devDependency`
+   (generation-time only) and never ships to consumers.
 2. **OpenAPI Generator** - Uses the typescript-axios generator (no custom templates; `openapi-generator-config.yml`
    sets `useSingleRequestParameter: true`).
 3. **Generated API code** (`src/api/`) - Auto-generated, DO NOT edit manually.
@@ -36,16 +41,18 @@ of CI. See "Security: axios floor & monitoring" below.
 ### Build Commands
 ```bash
 # Generate API client code (run in root directory)
-npm ci
-npm run openapi:fetch         # Download + SHA-256 verify the published openapi3.yml
-npm run openapi:set:version   # Set OpenAPI generator version to 6.0.0
-npm run openapi:generate      # Generate TypeScript code from the fetched OpenAPI spec
+npm ci                        # Installs @nemtus/symbol-openapi (the spec) + tooling
+npm run openapi:set:version   # Set OpenAPI generator version to 7.14.0
+npm run openapi:generate      # Generate TypeScript code from @nemtus/symbol-openapi's openapi3.yml
 npm run build                 # Build CJS, ESM, and CDN bundles
 ```
 
-To bump the OpenAPI spec version, edit `SPEC_VERSION` / `SPEC_SHA256` in `fetch-openapi.js`
-(see the comment in that file for how to obtain the new checksum). Java is required for the
-OpenAPI Generator itself.
+To bump the OpenAPI spec version, bump the `@nemtus/symbol-openapi` devDependency in `package.json`
+(and the lockfile) — e.g. via Dependabot or `npm install @nemtus/symbol-openapi@<version>` — then
+regenerate. If the target spec release is < 7 days old, the `.npmrc` `min-release-age` cooldown blocks
+that local `npm install` (`ENOVERSIONS`); add `--min-release-age=0` for that one command (`npm ci` and
+Dependabot are unaffected). Java is required for the OpenAPI Generator itself. The spec is now OpenAPI
+**3.1.0**, which requires OpenAPI Generator **7.x** (6.x cannot parse 3.1) — see `openapi:set:version`.
 
 ### Test Commands
 ```bash
@@ -109,14 +116,17 @@ Both workflows:
   `npm view axios version`. Update the floor to the latest
   known-CVE-free 1.x.
 - **Continuous**: Dependabot (security fixes are exempt from the 7-day cooldown) + the CI audit gates.
+  This also tracks the `@nemtus/symbol-openapi` spec devDependency, whose lockfile integrity hash is the
+  spec's tamper check (the role the old `SPEC_SHA256` played).
 - **Install-time**: `.npmrc` sets `ignore-scripts=true` (blocks malicious postinstall in the deeper axios
   transitive tree) and `min-release-age=7` (local cooldown; `npm ci` is unaffected and gated by `npm audit`).
 
 ## Important Notes
 
 - **DO NOT manually edit** files in `src/api/` - they are auto-generated.
-- The OpenAPI spec is fetched from a pinned `symbol/symbol-openapi` GitHub release via `fetch-openapi.js`
-  (no git submodule); SHA-256 is verified before use.
+- The OpenAPI spec comes from the `@nemtus/symbol-openapi` npm devDependency (built/published from the
+  `nemtus/symbol` mirror of upstream `symbol/symbol`); it is version-pinned in `package.json` and
+  integrity-verified by `package-lock.json` (no git submodule, no manual SHA-256).
 - Java is required for OpenAPI Generator CLI.
 - Deterministic tests inject a custom `axios.create({ adapter })` instance as the **3rd `*RoutesApi`
   constructor argument** to capture requests without a network (see `src/*.spec.ts`).

@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit configuration — https://docs.coderabbit.ai/reference/configuration
+#
+# Exclude the auto-generated OpenAPI client (`src/api/`) from review. That code is
+# produced by `npm run openapi:generate` and must not be hand-edited, so review
+# findings on it are not actionable here (the fix belongs in the spec or the
+# generator config). This mirrors the existing ESLint / Prettier / coverage / cspell
+# ignores for the same directory. Only negated (`!`) globs are listed, so every other
+# path stays in scope; package-lock.json is already excluded by CodeRabbit's defaults.
+reviews:
+  path_filters:
+    - "!src/api/**"

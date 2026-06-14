@@ -32,3 +32,9 @@ GEMINI.md
 # helper. It is unused here (publishing goes through the build + npm OIDC pipeline),
 # does `git init`/`git add .`/`git push origin master`, and would only be a footgun.
 git_push.sh
+
+# Don't emit the per-model/per-API markdown docs (new in generator 7.x). This package
+# ships the compiled client from src/api; the standalone docs are unused and would only
+# add churn to every regeneration.
+docs/**
+README.md

@@ -11,17 +11,7 @@ const globals = require('globals');
 
 module.exports = tseslint.config(
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'lib/**',
-      'cdn/**',
-      'coverage/**',
-      'openapi-spec/**',
-      'src/api/**',
-      'tests/*/node_modules/**',
-      '**/*.min.js',
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'lib/**', 'cdn/**', 'coverage/**', 'src/api/**', 'tests/*/node_modules/**', '**/*.min.js'],
   },
   {
     languageOptions: {

@@ -40,7 +40,7 @@
   "homepage": "https://github.com/nemtus/symbol-sdk-openapi-generator-typescript-axios#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@nemtus/symbol-openapi": "^1.0.5",
+    "@nemtus/symbol-openapi": "1.0.5",
     "@openapitools/openapi-generator-cli": "^2.22.0",
     "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^10.4.1",

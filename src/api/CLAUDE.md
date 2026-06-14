@@ -10,7 +10,7 @@ from the `@nemtus/symbol-openapi` package's `openapi3.yml`
   - the spec version: the `@nemtus/symbol-openapi` devDependency version in `package.json`
   - the generation behaviour: `openapi-generator-config.yml`
 - Regenerate with: `npm ci && npm run openapi:set:version && npm run openapi:generate`
-- This directory is intentionally excluded from ESLint, Prettier and test coverage
-  (see `.eslintignore`, `.prettierignore`, `vitest.config.ts`). `type:check` still
-  compiles it via `tsconfig.json`.
+- This directory is intentionally excluded from ESLint, Prettier, test coverage and
+  CodeRabbit review (see `eslint.config.js`, `.prettierignore`, `vitest.config.ts`,
+  `.coderabbit.yaml`). `type:check` still compiles it via `tsconfig.json`.
 - `.openapi-generator-ignore` keeps this `CLAUDE.md` from being removed on regeneration.

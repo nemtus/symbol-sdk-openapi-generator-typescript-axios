@@ -106,7 +106,7 @@ Both workflows:
 
 ## Security: axios floor & monitoring
 
-- **Single source of truth**: the `axios` range and `overrides` (`form-data >= 4.0.4`,
+- **Single source of truth**: the `axios` range and `overrides` (`form-data >= 4.0.6`,
   `follow-redirects >= 1.15.6`) in the root `package.json`. The published `package.json` is the hand-managed
   root one (`bundle.js` copies it into `dist/`), so the axios pin lives there — not in generator output.
 - **Floor**: `axios ^1.17.0` (≥ the known-CVE-free `1.15.1`). The `test-unit` CI job fails if the resolved

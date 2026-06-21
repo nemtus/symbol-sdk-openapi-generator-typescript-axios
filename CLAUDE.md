@@ -120,6 +120,19 @@ Both workflows:
   spec's tamper check (the role the old `SPEC_SHA256` played).
 - **Install-time**: `.npmrc` sets `ignore-scripts=true` (blocks malicious postinstall in the deeper axios
   transitive tree) and `min-release-age=7` (local cooldown; `npm ci` is unaffected and gated by `npm audit`).
+- **Behavioural supply-chain layer (Socket.dev, free for this public repo)**: complements `npm audit`, which
+  only sees *CVE-registered* flaws. Two layers, zero cost, no API token:
+  - **Socket GitHub App** (`socket.yml` at root) — reads only dependency manifests (never source) and
+    comments supply-chain risk on PRs (malware, typosquats, install scripts, obfuscation, network/shell
+    access, maintainer changes). Primary target: Dependabot PRs. Installed once via the GitHub Marketplace
+    (org-admin action, outside the repo).
+  - **Socket Firewall Free (`sfw`)** in CI/CD — `SocketDev/action@<sha>` (`mode: firewall-free`, SHA-pinned
+    for `pinact`, tracked by the github-actions Dependabot) installs `sfw`; every `npm ci` / `npx` is run as
+    `sfw npm ci` so *confirmed malware* is blocked at fetch time (gates the gating jobs; AI-only detections
+    warn, not block, so no false-positive build breaks). The container `test-browser-cdn` job applies it too
+    but is `continue-on-error`, so an sfw download failure there never reds CI.
+  - **NOT used**: `socket optimize` (its `@socketregistry` overrides would fight the hand-managed `overrides`
+    block above).
 
 ## Important Notes
 

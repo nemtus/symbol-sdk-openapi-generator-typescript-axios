@@ -1,0 +1,27 @@
+# Socket.dev GitHub App configuration.
+# Free for public/open-source repos: the App reads only dependency manifests
+# (never source code) and posts supply-chain risk findings on PRs. It is the
+# behavioural-risk layer (malware, typosquats, install scripts, obfuscation,
+# network/shell access, maintainer changes) that `npm audit` (CVE-only) cannot see.
+# https://docs.socket.dev/docs/socket-yml
+version: 2
+
+# Build outputs / generated code are not dependency manifests — skip them.
+projectIgnorePaths:
+  - dist
+  - src/api
+
+# Re-scan a PR only when a manifest actually changes (covers the monorepo test roots).
+triggerPaths:
+  - package.json
+  - package-lock.json
+  - tests/**/package.json
+  - tests/**/package-lock.json
+
+githubApp:
+  enabled: true
+  pullRequestAlertsEnabled: true
+  dependencyOverviewEnabled: true
+  projectReportsEnabled: true
+  # Do NOT ignore Dependabot: its PRs are the main entry point for new
+  # dependencies and therefore the primary target of Socket's review.

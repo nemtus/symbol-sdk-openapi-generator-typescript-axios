@@ -42,6 +42,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
       - run: java -version
+      # Socket Firewall Free (sfw): blocks confirmed-malware fetches at install time —
+      # the behavioural layer `npm audit` (CVE-only) misses. firewall-free needs no token.
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-root
         with:
@@ -50,11 +56,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-root-
       - run: npm audit --package-lock-only
-      - run: npm ci
+      - run: sfw npm ci
       # Use the lockfile-pinned generator (a devDependency), not an unpinned global
       # `npm install -g @latest`. npx resolves to the local node_modules copy, so the
       # version is reproducible, audited (it's in the lockfile), and bumped via Dependabot.
-      - run: npx @openapitools/openapi-generator-cli version
+      - run: sfw npx @openapitools/openapi-generator-cli version
       - run: npm run openapi:set:version
       - run: npm run openapi:generate
       - run: npm run build
@@ -85,6 +91,10 @@ jobs:
         with:
           name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
           path: dist/
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-root-test
         with:
@@ -93,7 +103,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-root-
       - run: npm audit --package-lock-only
-      - run: npm ci
+      - run: sfw npm ci
       # Defence in depth: even if `npm audit` misses something (e.g. a known-bad axios
       # version with no advisory filed yet), fail this gating job when the resolved axios
       # is below the known-CVE-free floor. The `overrides` in package.json force the safe
@@ -129,6 +139,10 @@ jobs:
         with:
           name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
           path: dist/
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-nodejs-javascript
         with:
@@ -138,7 +152,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-javascript-
       - run: npm audit --package-lock-only
         working-directory: ./tests/nodejs-javascript
-      - run: npm ci
+      - run: sfw npm ci
         working-directory: ./tests/nodejs-javascript
       - run: npm test
         working-directory: ./tests/nodejs-javascript
@@ -167,6 +181,10 @@ jobs:
         with:
           name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
           path: dist/
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-nodejs-typescript
         with:
@@ -176,7 +194,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.node-version }}-nodejs-typescript-
       - run: npm audit --package-lock-only
         working-directory: ./tests/nodejs-typescript
-      - run: npm ci
+      - run: sfw npm ci
         working-directory: ./tests/nodejs-typescript
       - run: npm test
         working-directory: ./tests/nodejs-typescript
@@ -208,6 +226,12 @@ jobs:
         with:
           name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
           path: dist/
+      # This job runs in the playwright container as --user 1001; if sfw's binary
+      # download fails here it only affects this job, which is continue-on-error.
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-browser-cdn
         with:
@@ -217,7 +241,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.node-version }}-browser-cdn-
       - run: npm audit --package-lock-only
         working-directory: ./tests/browser-cdn
-      - run: npm ci
+      - run: sfw npm ci
         working-directory: ./tests/browser-cdn
       - run: npm run test
         working-directory: ./tests/browser-cdn
@@ -249,6 +273,10 @@ jobs:
         with:
           name: dist-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.java-version }}-${{ matrix.node-version }}
           path: dist/
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-root-dry-run
         with:
@@ -257,7 +285,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-root-
       - run: npm audit --package-lock-only
-      - run: npm ci
+      - run: sfw npm ci
       # Validate the SAME tree CD publishes (./dist) by packing it. We use `npm pack`,
       # not `npm publish --dry-run`: the latter contacts the registry and fails with
       # "cannot publish over previously published versions" because the version isn't
@@ -275,6 +303,10 @@ jobs:
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 24.x
+      - uses: SocketDev/action@ba6de6cc0565af1f42295590380973573297e31f # v1.3.2
+        with:
+          mode: firewall-free
+          job-summary: all
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: cache-lint
         with:
@@ -283,7 +315,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-24.x-root-
       - run: npm audit --package-lock-only
-      - run: npm ci
+      - run: sfw npm ci
       - run: npm run format:check
       - run: npm run lint
       - run: npm run type:check

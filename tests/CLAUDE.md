@@ -41,12 +41,14 @@ Subprojects:
 - `nodejs-javascript/` — CommonJS consumer, vitest. Run: `npm ci && npm test`.
 - `nodejs-typescript/` — TypeScript consumer, vitest. Run: `npm ci && npm test`.
 - `browser-cdn/` — loads the CDN bundle in a real browser via Playwright. CI runs it
-  inside the `mcr.microsoft.com/playwright:<version>-noble` container, so the
-  `@playwright/test` / `playwright` version in `package.json` MUST stay in sync with that
-  container tag (in `.github/workflows/{ci-nodejs,cd-publish-to-npm}.yml`). Dependabot is
-  intentionally NOT set to ignore Playwright (ignoring it would also hide security-update
-  PRs), so when a Playwright bump PR arrives, **also bump the container image tag to the
-  same version in that merge**. Until they match, only this (non-gating) job is affected.
+  inside the `mcr.microsoft.com/playwright:<version>-noble` container, whose tag MUST
+  match the `@playwright/test` / `playwright` version. That tag is **derived
+  automatically**: the `detect-playwright-version` job in
+  `.github/workflows/{ci-nodejs,cd-publish-to-npm}.yml` reads the locked `playwright`
+  version from `package-lock.json` and the container uses
+  `v${{ needs.detect-playwright-version.outputs.version }}-noble`. So a Dependabot
+  Playwright bump needs **no** manual container-tag edit — it just works. (Dependabot is
+  intentionally NOT set to ignore Playwright, so security-update PRs are not hidden.)
 
 Conventions:
 - Each project has a local `vitest.config.mts` so it does NOT inherit the root
